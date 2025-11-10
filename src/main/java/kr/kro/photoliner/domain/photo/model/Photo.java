@@ -5,8 +5,7 @@ import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
@@ -19,15 +18,14 @@ public class Photo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "file_path", nullable = false)
-    private String filePath;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
 
     @Column(name = "captured_dt", nullable = false)
     private LocalDateTime capturedDt;
 
     @Column(name = "location", nullable = false)
-    @JdbcTypeCode(SqlTypes.GEOMETRY)
-    private String location;
+    private Point location;
 
     @MapsId
     @ManyToOne

@@ -1,9 +1,10 @@
 package kr.kro.photoliner.domain.user.model;
 
-import jakarta.persistence.*;
 import kr.kro.photoliner.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
