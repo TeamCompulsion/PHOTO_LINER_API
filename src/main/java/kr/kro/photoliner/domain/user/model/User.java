@@ -1,7 +1,6 @@
 package kr.kro.photoliner.domain.user.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import kr.kro.photoliner.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,5 +10,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
+
+    @Column(name = "name", nullable = false)
+    private String name;
 }
