@@ -1,6 +1,14 @@
 package kr.kro.photoliner.domain.photo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.Getter;
@@ -18,8 +26,11 @@ public class Photo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
+
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
 
     @Column(name = "captured_dt", nullable = false)
     private LocalDateTime capturedDt;
