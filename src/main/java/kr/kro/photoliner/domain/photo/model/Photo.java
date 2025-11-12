@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.locationtech.jts.geom.Point;
 
@@ -26,18 +28,23 @@ public class Photo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
+    @NonNull
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
+    @NonNull
     @Column(name = "captured_dt", nullable = false)
     private LocalDateTime capturedDt;
 
+    @NonNull
     @Column(name = "location", nullable = false)
     private Point location;
 
+    @NonNull
     @MapsId
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
