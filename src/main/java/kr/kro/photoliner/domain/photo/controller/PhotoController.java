@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +29,8 @@ public class PhotoController {
     @GetMapping("/viewport")
     public ResponseEntity<ViewportResponse> getViewport(
             @RequestParam Long userId,
-            @RequestParam LocalDateTime from,
-            @RequestParam LocalDateTime to,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to,
             @RequestParam double swLat,
             @RequestParam double swLng,
             @RequestParam double neLat,
