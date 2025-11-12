@@ -20,8 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PhotoService {
 
-    private PhotoRepository photoRepository;
-    private GeometryFactory geometryFactory;
+    private final PhotoRepository photoRepository;
+    private final GeometryFactory geometryFactory;
 
     public PhotosResponse getPhotoList(Long userId){
         Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
