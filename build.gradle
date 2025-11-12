@@ -25,6 +25,8 @@ implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
