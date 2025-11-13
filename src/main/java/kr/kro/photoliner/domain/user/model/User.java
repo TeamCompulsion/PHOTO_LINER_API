@@ -25,8 +25,4 @@ public class User extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NonNull
-    @CreatedDate
-    @Column(name = "updated_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = true)
-    private LocalDateTime updatedAt;
 }
