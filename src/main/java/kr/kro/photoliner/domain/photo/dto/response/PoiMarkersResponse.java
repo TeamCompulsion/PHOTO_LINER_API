@@ -2,8 +2,8 @@ package kr.kro.photoliner.domain.photo.dto.response;
 
 import java.util.List;
 
-public record MarkersResponse(
+public record PoiMarkersResponse(
         Integer count,
-        List<MarkerResponse> markers
+        List<PoiMarkerResponse> markers
 ) {
 }

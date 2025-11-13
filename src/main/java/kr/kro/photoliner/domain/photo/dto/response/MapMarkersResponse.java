@@ -4,12 +4,12 @@ import kr.kro.photoliner.domain.photo.model.Photos;
 
 import java.time.LocalDate;
 
-public record ViewportMarkersResponse(
+public record MapMarkersResponse(
         PhotoMarkersResponse photoMarkersResponse,
-        MarkersResponse markersResponse
+        PoiMarkersResponse poiMarkersResponse
 ) {
-    public static ViewportMarkersResponse from(Photos photos, LocalDate from, LocalDate to) {
-        return new ViewportMarkersResponse(
+    public static MapMarkersResponse from(Photos photos, LocalDate from, LocalDate to) {
+        return new MapMarkersResponse(
                 photos.getPhotoMarkersInDateRange(from, to),
                 photos.getMarkersOutOfDateRange(from, to)
         );

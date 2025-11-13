@@ -1,9 +1,9 @@
 package kr.kro.photoliner.domain.photo.model;
 
-import kr.kro.photoliner.domain.photo.dto.response.MarkerResponse;
-import kr.kro.photoliner.domain.photo.dto.response.MarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkerResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkersResponse;
+import kr.kro.photoliner.domain.photo.dto.response.PoiMarkerResponse;
+import kr.kro.photoliner.domain.photo.dto.response.PoiMarkersResponse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,12 +15,12 @@ public class Photos {
         this.photos = photos;
     }
 
-    public MarkersResponse getMarkersOutOfDateRange(LocalDate from, LocalDate to) {
-        List<MarkerResponse> markers = photos.stream()
+    public PoiMarkersResponse getMarkersOutOfDateRange(LocalDate from, LocalDate to) {
+        List<PoiMarkerResponse> markers = photos.stream()
                 .filter(photo -> photo.isBetween(from, to))
-                .map(MarkerResponse::from)
+                .map(PoiMarkerResponse::from)
                 .toList();
-        return new MarkersResponse(
+        return new PoiMarkersResponse(
                 markers.size(),
                 markers
         );

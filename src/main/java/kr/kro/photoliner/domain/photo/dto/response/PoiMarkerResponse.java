@@ -4,14 +4,14 @@ import kr.kro.photoliner.domain.photo.model.Photo;
 
 import java.time.LocalDateTime;
 
-public record MarkerResponse(
+public record PoiMarkerResponse(
         Long id,
         LocalDateTime capturedDt,
         double lat,
         double lng
 ) {
-    public static MarkerResponse from(Photo photo) {
-        return new MarkerResponse(
+    public static PoiMarkerResponse from(Photo photo) {
+        return new PoiMarkerResponse(
                 photo.getId(),
                 photo.getCapturedDt(),
                 photo.getLocation().getY(),

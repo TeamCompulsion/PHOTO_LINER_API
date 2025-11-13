@@ -1,8 +1,8 @@
 package kr.kro.photoliner.domain.photo.service;
 
-import kr.kro.photoliner.domain.photo.dto.request.ViewportMarkersRequest;
+import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
+import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.dto.response.ViewportMarkersResponse;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
@@ -30,13 +30,13 @@ public class PhotoService {
         return PhotosResponse.from(photos);
     }
 
-    public ViewportMarkersResponse getMarkersInViewport(ViewportMarkersRequest request) {
+    public MapMarkersResponse getMarkersInViewport(MapMarkersRequest request) {
         Point sw = geometryFactory.createPoint(new Coordinate(request.swLng(), request.swLat()));
         Point ne = geometryFactory.createPoint(new Coordinate(request.neLng(), request.neLat()));
 
         List<Photo> photos = photoRepository.findByUserIdInBox(request.userId(), sw, ne);
 
-        return ViewportMarkersResponse.from(
+        return MapMarkersResponse.from(
                 new Photos(photos),
                 request.from(),
                 request.to()
