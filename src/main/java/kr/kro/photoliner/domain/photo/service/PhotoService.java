@@ -1,10 +1,8 @@
 package kr.kro.photoliner.domain.photo.service;
 
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
-import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
-import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
+import kr.kro.photoliner.domain.photo.dto.response.*;
 import kr.kro.photoliner.domain.photo.model.Photo;
-import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
@@ -15,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,10 +35,31 @@ public class PhotoService {
 
         List<Photo> photos = photoRepository.findByUserIdInBox(request.userId(), sw, ne);
 
-        return MapMarkersResponse.from(
-                new Photos(photos),
-                request.from(),
-                request.to()
+        return new MapMarkersResponse(
+                getPhotoMarkersInDateRange(photos, request.from(), request.to()),
+                getPoiMarkersOutOfDateRange(photos, request.from(), request.to())
+        );
+    }
+
+    private PoiMarkersResponse getPoiMarkersOutOfDateRange(List<Photo> photos, LocalDate from, LocalDate to) {
+        List<PoiMarkerResponse> poiMarkers = photos.stream()
+                .filter(photo -> photo.isBetween(from, to))
+                .map(PoiMarkerResponse::from)
+                .toList();
+        return new PoiMarkersResponse(
+                poiMarkers.size(),
+                poiMarkers
+        );
+    }
+
+    private PhotoMarkersResponse getPhotoMarkersInDateRange(List<Photo> photos, LocalDate from, LocalDate to) {
+        List<PhotoMarkerResponse> photoMarkers = photos.stream()
+                .filter(photo -> photo.isBetween(from, to))
+                .map(PhotoMarkerResponse::from)
+                .toList();
+        return new PhotoMarkersResponse(
+                photoMarkers.size(),
+                photoMarkers
         );
     }
 }
