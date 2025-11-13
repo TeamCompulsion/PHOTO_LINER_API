@@ -1,0 +1,34 @@
+name: "🚀 Deploy"
+description: "배포 요청"
+labels: [ "deploy" ]
+body:
+  - type: textarea
+    attributes:
+      label: 📦 배포 내용
+      description: 어떤 내용을 배포하는지 간단히 적어주세요.
+      placeholder: |
+        - v1.2.3 배포
+        - 클러스터링 기능 추가
+        - 버그 수정 포함
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 🧾 변경 사항
+      description: 포함된 PR 또는 변경점을 적어주세요.
+      placeholder: |
+        - #123, #124
+        - 지도 확대 클러스터링 개선
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 📌 참고
+      description: 참고 링크나 문서를 적어주세요.
+      placeholder: |
+        - 릴리즈 노트 링크
+        - 관련 이슈
+    validations:
+      required: false
