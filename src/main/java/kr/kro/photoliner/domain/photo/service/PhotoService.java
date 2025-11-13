@@ -2,7 +2,7 @@ package kr.kro.photoliner.domain.photo.service;
 
 import kr.kro.photoliner.domain.photo.dto.response.Photos;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.dto.response.ViewportResponse;
+import kr.kro.photoliner.domain.photo.dto.response.ViewportMarkersResponse;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class PhotoService {
         return PhotosResponse.from(photos);
     }
 
-    public ViewportResponse getViewport(
+    public ViewportMarkersResponse getMarkersInViewport(
             Long userId,
             LocalDate from,
             LocalDate to,
@@ -43,7 +43,7 @@ public class PhotoService {
         Point ne = geometryFactory.createPoint(new Coordinate(neLng, neLat));
         List<Photo> photos = photoRepository.findByUserIdInBox(userId, sw, ne);
 
-        return ViewportResponse.from(
+        return ViewportMarkersResponse.from(
                 new Photos(photos),
                 from,
                 to

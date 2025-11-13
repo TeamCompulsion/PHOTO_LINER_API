@@ -1,7 +1,7 @@
 package kr.kro.photoliner.domain.photo.controller;
 
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.dto.response.ViewportResponse;
+import kr.kro.photoliner.domain.photo.dto.response.ViewportMarkersResponse;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,12 @@ public class PhotoController {
     @GetMapping("/list")
     public ResponseEntity<PhotosResponse> getPhotoList(
             @RequestParam Long userId
-            ){
+    ) {
         return ResponseEntity.ok(photoService.getPhotoList(userId));
     }
 
     @GetMapping("/viewport")
-    public ResponseEntity<ViewportResponse> getViewport(
+    public ResponseEntity<ViewportMarkersResponse> getViewport(
             @RequestParam Long userId,
             @RequestParam LocalDate from,
             @RequestParam LocalDate to,
@@ -35,7 +35,7 @@ public class PhotoController {
             @RequestParam double swLng,
             @RequestParam double neLat,
             @RequestParam double neLng
-            ){
-        return ResponseEntity.ok(photoService.getViewport(userId, from, to, swLat, swLng, neLat, neLng));
+    ) {
+        return ResponseEntity.ok(photoService.getMarkersInViewport(userId, from, to, swLat, swLng, neLat, neLng));
     }
 }
