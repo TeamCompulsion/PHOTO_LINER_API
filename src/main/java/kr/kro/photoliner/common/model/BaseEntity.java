@@ -14,9 +14,4 @@ public abstract class BaseEntity {
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    @NonNull
-    @CreatedDate
-    @Column(name = "createdAt", columnDefinition = "TIMESTAMP", nullable = false, updatable = true)
-    private LocalDateTime updatedAt;
 }
