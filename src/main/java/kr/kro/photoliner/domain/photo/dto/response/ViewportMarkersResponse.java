@@ -1,5 +1,7 @@
 package kr.kro.photoliner.domain.photo.dto.response;
 
+import kr.kro.photoliner.domain.photo.model.Photos;
+
 import java.time.LocalDate;
 
 public record ViewportMarkersResponse(

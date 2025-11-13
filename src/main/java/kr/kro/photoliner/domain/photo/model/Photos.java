@@ -1,6 +1,9 @@
-package kr.kro.photoliner.domain.photo.dto.response;
+package kr.kro.photoliner.domain.photo.model;
 
-import kr.kro.photoliner.domain.photo.model.Photo;
+import kr.kro.photoliner.domain.photo.dto.response.MarkerResponse;
+import kr.kro.photoliner.domain.photo.dto.response.MarkersResponse;
+import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkerResponse;
+import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkersResponse;
 
 import java.time.LocalDate;
 import java.util.List;

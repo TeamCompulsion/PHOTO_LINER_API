@@ -1,9 +1,9 @@
 package kr.kro.photoliner.domain.photo.service;
 
-import kr.kro.photoliner.domain.photo.dto.response.Photos;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.dto.response.ViewportMarkersResponse;
 import kr.kro.photoliner.domain.photo.model.Photo;
+import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
