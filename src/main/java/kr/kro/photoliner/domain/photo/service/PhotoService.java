@@ -1,5 +1,6 @@
 package kr.kro.photoliner.domain.photo.service;
 
+import kr.kro.photoliner.domain.photo.dto.request.ViewportMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.dto.response.ViewportMarkersResponse;
 import kr.kro.photoliner.domain.photo.model.Photo;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,23 +30,16 @@ public class PhotoService {
         return PhotosResponse.from(photos);
     }
 
-    public ViewportMarkersResponse getMarkersInViewport(
-            Long userId,
-            LocalDate from,
-            LocalDate to,
-            double swLat,
-            double swLng,
-            double neLat,
-            double neLng
-    ) {
-        Point sw = geometryFactory.createPoint(new Coordinate(swLng, swLat));
-        Point ne = geometryFactory.createPoint(new Coordinate(neLng, neLat));
-        List<Photo> photos = photoRepository.findByUserIdInBox(userId, sw, ne);
+    public ViewportMarkersResponse getMarkersInViewport(ViewportMarkersRequest request) {
+        Point sw = geometryFactory.createPoint(new Coordinate(request.swLng(), request.swLat()));
+        Point ne = geometryFactory.createPoint(new Coordinate(request.neLng(), request.neLat()));
+
+        List<Photo> photos = photoRepository.findByUserIdInBox(request.userId(), sw, ne);
 
         return ViewportMarkersResponse.from(
                 new Photos(photos),
-                from,
-                to
+                request.from(),
+                request.to()
         );
     }
 }

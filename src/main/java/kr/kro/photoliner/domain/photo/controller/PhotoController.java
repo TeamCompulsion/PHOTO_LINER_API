@@ -1,5 +1,6 @@
 package kr.kro.photoliner.domain.photo.controller;
 
+import kr.kro.photoliner.domain.photo.dto.request.ViewportMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.dto.response.ViewportMarkersResponse;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,15 +26,7 @@ public class PhotoController {
     }
 
     @GetMapping("/viewport")
-    public ResponseEntity<ViewportMarkersResponse> getViewport(
-            @RequestParam Long userId,
-            @RequestParam LocalDate from,
-            @RequestParam LocalDate to,
-            @RequestParam double swLat,
-            @RequestParam double swLng,
-            @RequestParam double neLat,
-            @RequestParam double neLng
-    ) {
-        return ResponseEntity.ok(photoService.getMarkersInViewport(userId, from, to, swLat, swLng, neLat, neLng));
+    public ResponseEntity<ViewportMarkersResponse> getViewport(ViewportMarkersRequest request) {
+        return ResponseEntity.ok(photoService.getMarkersInViewport(request));
     }
 }
