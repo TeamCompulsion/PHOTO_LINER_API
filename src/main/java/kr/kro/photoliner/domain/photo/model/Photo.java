@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import org.locationtech.jts.geom.Point;
@@ -40,4 +39,9 @@ public class Photo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    public boolean isBetween(LocalDate start, LocalDate end) {
+        LocalDate capturedDate = capturedDt.toLocalDate();
+        return capturedDate.isAfter(start) && capturedDate.isBefore(end);
+    }
 }
