@@ -1,5 +1,14 @@
 ## 📌 ISSUE 번호
 - close #[이슈번호]
+
 ## 📄 작업 내용 요약
 
+
 ## 📢 참고 사항
+
+
+## ✅ 체크리스트
+- [X] ISSUE 번호 연결 했나요?
+- [X] Reviewers 지정 했나요?
+- [X] Assignees 지정 했나요?
+- [X] Labels 지정 했나요?
