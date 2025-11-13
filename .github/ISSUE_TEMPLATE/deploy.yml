@@ -1,6 +1,7 @@
 name: "🚀 Deploy"
 description: "배포 요청"
 labels: [ "deploy" ]
+title: [ "[Deploy] " ]
 body:
   - type: textarea
     attributes:
