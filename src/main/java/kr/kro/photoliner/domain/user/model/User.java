@@ -1,14 +1,9 @@
 package kr.kro.photoliner.domain.user.model;
 
+import jakarta.persistence.*;
 import kr.kro.photoliner.common.model.BaseEntity;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
-
-import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
