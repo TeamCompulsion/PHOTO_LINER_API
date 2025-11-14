@@ -1,6 +1,7 @@
 package kr.kro.photoliner.domain.photo.dto.response;
 
 import kr.kro.photoliner.domain.photo.model.Photo;
+import kr.kro.photoliner.domain.photo.model.Photos;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,10 +10,10 @@ public record PhotosResponse(
         Integer count,
         List<InnerPhotoResponse> photos
 ) {
-    public static PhotosResponse from(List<Photo> photos) {
+    public static PhotosResponse from(Photos photos) {
         return new PhotosResponse(
-                photos.size(),
-                photos.stream()
+                photos.count(),
+                photos.photos().stream()
                         .map(InnerPhotoResponse::from)
                         .toList()
         );

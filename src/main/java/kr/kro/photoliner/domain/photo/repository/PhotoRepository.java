@@ -1,6 +1,7 @@
 package kr.kro.photoliner.domain.photo.repository;
 
 import kr.kro.photoliner.domain.photo.model.Photo;
+import kr.kro.photoliner.domain.photo.model.Photos;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,10 @@ public interface PhotoRepository extends Repository<Photo, Long> {
             Long userId,
             Pageable pageable
     );
+
+    default Photos findPhotosByUserId(Long userId, Pageable pageable) {
+        return new Photos(findByUserId(userId, pageable));
+    }
 
     @Query("""
             select p
@@ -27,4 +32,8 @@ public interface PhotoRepository extends Repository<Photo, Long> {
             Point sw,
             Point ne
     );
+
+    default Photos findPhotosByUserIdInBox(Long userId, Point sw, Point ne) {
+        return new Photos(findByUserIdInBox(userId, sw, ne));
+    }
 }

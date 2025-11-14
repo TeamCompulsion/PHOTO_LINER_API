@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/photos")
 public class PhotoController {
 
     private final PhotoService photoService;
 
-    @GetMapping("/photos")
+    @GetMapping
     public ResponseEntity<PhotosResponse> getPhotoList(
             @RequestParam Long userId
     ) {
