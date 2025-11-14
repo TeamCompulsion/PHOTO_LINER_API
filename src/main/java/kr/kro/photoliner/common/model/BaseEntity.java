@@ -11,13 +11,13 @@ import org.springframework.data.annotation.CreatedDate;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-  @NonNull
-  @CreatedDate
-  @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+    @NonNull
+    @CreatedDate
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-  @NonNull
-  @CreatedDate
-  @Column(name = "updated_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = true)
-  private LocalDateTime updatedAt;
+    @NonNull
+    @CreatedDate
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP", nullable = false, updatable = true)
+    private LocalDateTime updatedAt;
 }

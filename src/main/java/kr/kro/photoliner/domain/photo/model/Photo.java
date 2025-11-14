@@ -24,32 +24,32 @@ import org.locationtech.jts.geom.Point;
 @Setter
 public class Photo extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @NonNull
-  @Column(name = "file_name", nullable = false)
-  private String fileName;
+    @NonNull
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
 
-  @NonNull
-  @Column(name = "file_path", nullable = false)
-  private String filePath;
+    @NonNull
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
 
-  @NonNull
-  @Column(name = "captured_dt", nullable = false)
-  private LocalDateTime capturedDt;
+    @NonNull
+    @Column(name = "captured_dt", nullable = false)
+    private LocalDateTime capturedDt;
 
-  @NonNull
-  @Column(name = "location", nullable = false)
-  private Point location;
+    @NonNull
+    @Column(name = "location", nullable = false)
+    private Point location;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
-  private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-  public boolean isBetween(LocalDate start, LocalDate end) {
-    LocalDate capturedDate = capturedDt.toLocalDate();
-    return capturedDate.isAfter(start) && capturedDate.isBefore(end);
-  }
+    public boolean isBetween(LocalDate start, LocalDate end) {
+        LocalDate capturedDate = capturedDt.toLocalDate();
+        return capturedDate.isAfter(start) && capturedDate.isBefore(end);
+    }
 }

@@ -10,30 +10,30 @@ import org.springframework.data.repository.Repository;
 
 public interface PhotoRepository extends Repository<Photo, Long> {
 
-  List<Photo> findByUserId(
-      Long userId,
-      Pageable pageable
-  );
+    List<Photo> findByUserId(
+            Long userId,
+            Pageable pageable
+    );
 
-  default Photos findPhotosByUserId(Long userId, Pageable pageable) {
-    return new Photos(findByUserId(userId, pageable));
-  }
+    default Photos findPhotosByUserId(Long userId, Pageable pageable) {
+        return new Photos(findByUserId(userId, pageable));
+    }
 
-  @Query("""
-      select p
-      from Photo p
-      where p.user.id = :userId
-        and function('st_x', p.location) between function('st_x', :sw) and function('st_x', :ne)
-        and function('st_y', p.location) between function('st_y', :sw) and function('st_y', :ne)
-      order by p.capturedDt desc
-      """)
-  List<Photo> findByUserIdInBox(
-      Long userId,
-      Point sw,
-      Point ne
-  );
+    @Query("""
+            select p
+            from Photo p
+            where p.user.id = :userId
+              and function('st_x', p.location) between function('st_x', :sw) and function('st_x', :ne)
+              and function('st_y', p.location) between function('st_y', :sw) and function('st_y', :ne)
+            order by p.capturedDt desc
+            """)
+    List<Photo> findByUserIdInBox(
+            Long userId,
+            Point sw,
+            Point ne
+    );
 
-  default Photos findPhotosByUserIdInBox(Long userId, Point sw, Point ne) {
-    return new Photos(findByUserIdInBox(userId, sw, ne));
-  }
+    default Photos findPhotosByUserIdInBox(Long userId, Point sw, Point ne) {
+        return new Photos(findByUserIdInBox(userId, sw, ne));
+    }
 }

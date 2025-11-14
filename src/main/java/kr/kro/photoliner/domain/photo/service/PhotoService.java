@@ -18,24 +18,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PhotoService {
 
-  private final PhotoRepository photoRepository;
-  private final GeometryFactory geometryFactory;
+    private final PhotoRepository photoRepository;
+    private final GeometryFactory geometryFactory;
 
-  public PhotosResponse getPhotoList(Long userId) {
-    Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
-    Photos photos = photoRepository.findPhotosByUserId(userId, pageable);
-    return PhotosResponse.from(photos);
-  }
+    public PhotosResponse getPhotoList(Long userId) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+        Photos photos = photoRepository.findPhotosByUserId(userId, pageable);
+        return PhotosResponse.from(photos);
+    }
 
-  public MapMarkersResponse getMarkersInViewport(MapMarkersRequest request) {
-    Point sw = geometryFactory.createPoint(new Coordinate(request.swLng(), request.swLat()));
-    Point ne = geometryFactory.createPoint(new Coordinate(request.neLng(), request.neLat()));
+    public MapMarkersResponse getMarkersInViewport(MapMarkersRequest request) {
+        Point sw = geometryFactory.createPoint(new Coordinate(request.swLng(), request.swLat()));
+        Point ne = geometryFactory.createPoint(new Coordinate(request.neLng(), request.neLat()));
 
-    Photos photos = photoRepository.findPhotosByUserIdInBox(request.userId(), sw, ne);
+        Photos photos = photoRepository.findPhotosByUserIdInBox(request.userId(), sw, ne);
 
-    return MapMarkersResponse.of(
-        photos.filterInDate(request.from(), request.to()),
-        photos.filterOutOfDate(request.from(), request.to())
-    );
-  }
+        return MapMarkersResponse.of(
+                photos.filterInDate(request.from(), request.to()),
+                photos.filterOutOfDate(request.from(), request.to())
+        );
+    }
 }

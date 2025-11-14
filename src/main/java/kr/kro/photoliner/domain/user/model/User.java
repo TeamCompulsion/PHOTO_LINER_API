@@ -16,14 +16,14 @@ import lombok.Setter;
 @Setter
 public class User extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "username", unique = true, nullable = false)
-  private String username;
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
 
-  @Column(name = "name", nullable = false)
-  private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
 }
