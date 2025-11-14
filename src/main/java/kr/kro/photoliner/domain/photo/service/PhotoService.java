@@ -6,7 +6,6 @@ import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +27,8 @@ public class PhotoService {
     }
 
     public MapMarkersResponse getMarkersInViewport(MapMarkersRequest request) {
-        Point sw = geometryFactory.createPoint(new Coordinate(request.swLng(), request.swLat()));
-        Point ne = geometryFactory.createPoint(new Coordinate(request.neLng(), request.neLat()));
+        Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
+        Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
         Photos photos = photoRepository.findPhotosByUserIdInBox(request.userId(), sw, ne);
 

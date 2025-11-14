@@ -1,5 +1,6 @@
 package kr.kro.photoliner.domain.photo.controller;
 
+import jakarta.validation.Valid;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
@@ -26,7 +27,7 @@ public class PhotoController {
     }
 
     @GetMapping("/markers")
-    public ResponseEntity<MapMarkersResponse> getMarkersInViewport(MapMarkersRequest request) {
+    public ResponseEntity<MapMarkersResponse> getMarkersInViewport(@Valid MapMarkersRequest request) {
         return ResponseEntity.ok(photoService.getMarkersInViewport(request));
     }
 }

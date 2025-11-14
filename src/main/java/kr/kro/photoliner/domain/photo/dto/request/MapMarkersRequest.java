@@ -1,51 +1,33 @@
 package kr.kro.photoliner.domain.photo.dto.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import org.locationtech.jts.geom.Coordinate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public record MapMarkersRequest(
+        @NotNull @Min(0)
         Long userId,
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         LocalDate from,
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         LocalDate to,
+        @Min(0) @Max(90)
         double swLat,
+        @Min(0) @Max(180)
         double swLng,
+        @Min(0) @Max(90)
         double neLat,
+        @Min(0) @Max(180)
         double neLng
 ) {
-
-    public MapMarkersRequest {
-        validateUserId();
-        validateDate(from);
-        validateDate(to);
-        validateLatitude(swLat);
-        validateLatitude(neLat);
-        validateLongitude(swLng);
-        validateLongitude(neLng);
+    public Coordinate getSouthWestCoordinate() {
+        return new Coordinate(swLng, swLat);
     }
 
-    private void validateUserId() {
-        if (userId == null || userId <= 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validateDate(LocalDate date) {
-        if (date == null) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validateLatitude(double lat) {
-        if (lat < 0 || lat > 90) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void validateLongitude(double lng) {
-        if (lng < 0 || lng > 180) {
-            throw new IllegalArgumentException();
-        }
+    public Coordinate getNorthEastCoordinate() {
+        return new Coordinate(neLng, neLat);
     }
 }
