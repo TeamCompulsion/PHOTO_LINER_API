@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/photos")
 public class PhotoController {
 
-    private final PhotoService photoService;
+  private final PhotoService photoService;
 
-    @GetMapping
-    public ResponseEntity<PhotosResponse> getPhotoList(
-            @RequestParam Long userId
-    ) {
-        return ResponseEntity.ok(photoService.getPhotoList(userId));
-    }
+  @GetMapping
+  public ResponseEntity<PhotosResponse> getPhotoList(
+      @RequestParam Long userId
+  ) {
+    return ResponseEntity.ok(photoService.getPhotoList(userId));
+  }
 
-    @GetMapping("/markers")
-    public ResponseEntity<MapMarkersResponse> getMarkersInViewport(MapMarkersRequest request) {
-        return ResponseEntity.ok(photoService.getMarkersInViewport(request));
-    }
+  @GetMapping("/markers")
+  public ResponseEntity<MapMarkersResponse> getMarkersInViewport(MapMarkersRequest request) {
+    return ResponseEntity.ok(photoService.getMarkersInViewport(request));
+  }
 }
