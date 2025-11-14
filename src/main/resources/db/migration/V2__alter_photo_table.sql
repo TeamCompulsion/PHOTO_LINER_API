@@ -1,1 +1,2 @@
-alter table photos add column updated_at datetime not null default current_timestamp
+alter table photos
+    add column updated_at datetime not null default current_timestamp
