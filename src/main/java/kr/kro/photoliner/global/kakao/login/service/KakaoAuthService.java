@@ -1,6 +1,7 @@
 package kr.kro.photoliner.global.kakao.login.service;
 
 import kr.kro.photoliner.global.kakao.login.client.KakaoAuthClient;
+import kr.kro.photoliner.global.kakao.login.constant.KakaoApiUrlConstant;
 import kr.kro.photoliner.global.kakao.login.dto.request.KakaoOauthTokenRequest;
 import kr.kro.photoliner.global.kakao.login.dto.response.KakaoOauthTokenResponse;
 import kr.kro.photoliner.global.kakao.login.dto.response.KakaoProfileResponse;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KakaoAuthService {
     private final static String DEFAULT_GRANT_TYPE = "authorization_code";
-    private final static String AUTHORIZATION_REDIRECT_URI = "https://kauth.kakao.com/oauth/authorize";
     private final KakaoAuthClient kakaoAuthClient;
 
     private String restApiKey;
@@ -41,7 +41,7 @@ public class KakaoAuthService {
 
 
     private String createAuthorizationRedirectUri(String restApiKey, String redirectUri) {
-        return AUTHORIZATION_REDIRECT_URI
+        return KakaoApiUrlConstant.AUTHORIZATION_REDIRECT_URL
                 + "?response_type=code"
                 + "&client_id=" + restApiKey
                 + "&redirect_uri=" + redirectUri;
