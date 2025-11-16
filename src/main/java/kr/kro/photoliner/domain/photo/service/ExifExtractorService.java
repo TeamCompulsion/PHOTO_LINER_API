@@ -2,6 +2,7 @@ package kr.kro.photoliner.domain.photo.service;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
+import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.Optional;
 import kr.kro.photoliner.domain.photo.dto.ExifData;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +39,8 @@ public class ExifExtractorService {
 
     private LocalDateTime extractCapturedDateTime(Metadata metadata) {
         return Optional.ofNullable(metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class))
-                .map(dir -> Optional.ofNullable(dir.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL))
-                        .orElseGet(() -> dir.getDate(ExifSubIFDDirectory.TAG_DATETIME)))
-                .map(date -> date.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime())
+                .map(this::extractCapturedDate)
+                .map(this::normalize)
                 .orElse(null);
     }
 
@@ -49,13 +48,30 @@ public class ExifExtractorService {
         return Optional.ofNullable(metadata)
                 .map(m -> m.getFirstDirectoryOfType(GpsDirectory.class))
                 .map(GpsDirectory::getGeoLocation)
-                .filter(loc -> {
-                    double lat = loc.getLatitude();
-                    double lon = loc.getLongitude();
-                    return Double.isFinite(lat) && Double.isFinite(lon) && isValidCoordinate(lat, lon);
-                })
-                .map(loc -> geometryFactory.createPoint(new Coordinate(loc.getLongitude(), loc.getLatitude())))
+                .filter(this::filterInvalidLocation)
+                .map(this::toPoint)
                 .orElse(null);
+    }
+
+    private LocalDateTime normalize(Date date) {
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    private Date extractCapturedDate(ExifSubIFDDirectory dir) {
+        return Optional.ofNullable(dir.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL))
+                .orElseGet(() -> dir.getDate(ExifSubIFDDirectory.TAG_DATETIME));
+    }
+
+    private boolean filterInvalidLocation(GeoLocation loc) {
+        double lat = loc.getLatitude();
+        double lon = loc.getLongitude();
+        return Double.isFinite(lat) && Double.isFinite(lon) && isValidCoordinate(lat, lon);
+    }
+
+    private Point toPoint(GeoLocation loc) {
+        return geometryFactory.createPoint(new Coordinate(loc.getLongitude(), loc.getLatitude()));
     }
 
     private boolean isValidCoordinate(double latitude, double longitude) {
