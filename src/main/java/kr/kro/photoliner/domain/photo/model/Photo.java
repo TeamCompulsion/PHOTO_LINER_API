@@ -41,12 +41,10 @@ public class Photo extends BaseEntity {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
-    @NotNull
-    @Column(name = "captured_dt", nullable = false)
+    @Column(name = "captured_dt")
     private LocalDateTime capturedDt;
 
-    @NotNull
-    @Column(name = "location", nullable = false)
+    @Column(name = "location")
     private Point location;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
