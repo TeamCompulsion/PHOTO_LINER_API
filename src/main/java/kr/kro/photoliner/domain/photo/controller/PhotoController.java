@@ -52,19 +52,4 @@ public class PhotoController {
         PhotoUploadResponse response = photoUploadService.uploadPhotos(userId, files);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-    @GetMapping("/{photoId}/image")
-    public ResponseEntity<Resource> downloadImage(
-            @PathVariable Long photoId
-    ) {
-        Photo photo = photoUploadService.getPhoto(photoId);
-        Resource resource = photoUploadService.loadAsResource(photo.getFilePath());
-        String mimeType = photoUploadService.determineMimeType(photo.getFilePath());
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(mimeType))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "inline; filename=\"" + photo.getFileName() + "\"")
-                .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600")
-                .body(resource);
-    }
 }

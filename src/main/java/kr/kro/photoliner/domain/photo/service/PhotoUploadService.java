@@ -10,7 +10,6 @@ import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,33 +57,5 @@ public class PhotoUploadService {
                 uploadedPhotos.size(),
                 uploadedPhotos
         );
-    }
-
-    @Transactional(readOnly = true)
-    public Photo getPhoto(Long photoId) {
-        return photoRepository.findById(photoId)
-                .orElseThrow(() -> new IllegalStateException("Photo not found with id: " + photoId));
-    }
-
-    public Resource loadAsResource(String filePath) {
-        return fileStorageService.loadAsResource(filePath);
-    }
-
-    public String determineMimeType(String filePath) {
-        String extension = getExtension(filePath);
-        return switch (extension) {
-            case "jpg", "jpeg" -> "image/jpeg";
-            case "png" -> "image/png";
-            case "heic", "heif" -> "image/heic";
-            default -> "application/octet-stream";
-        };
-    }
-
-    private String getExtension(String filename) {
-        int lastDotIndex = filename.lastIndexOf('.');
-        if (lastDotIndex == -1) {
-            return "";
-        }
-        return filename.substring(lastDotIndex + 1).toLowerCase();
     }
 }
