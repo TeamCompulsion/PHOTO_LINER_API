@@ -36,10 +36,9 @@ public class KakaoAuthService {
         );
     }
 
-    public KakaoProfileResponse.InnerKakaoAccount getKakaoUserProfile(String accessToken) {
+    public KakaoProfileResponse getKakaoUserProfile(String accessToken) {
         return kakaoAuthClient
-                .getKakaoUserProfile(accessToken)
-                .kakaoAccount();
+                .getKakaoUserProfile(accessToken);
     }
 
 
