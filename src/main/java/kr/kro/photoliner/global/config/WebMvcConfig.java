@@ -11,7 +11,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Value("photo.upload.base-dir")
+    @Value("${photo.upload.base-dir}")
     private String baseDir;
 
     @Override
