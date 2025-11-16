@@ -6,6 +6,7 @@ import kr.kro.photoliner.global.kakao.login.dto.request.KakaoOauthTokenRequest;
 import kr.kro.photoliner.global.kakao.login.dto.response.KakaoOauthTokenResponse;
 import kr.kro.photoliner.global.kakao.login.dto.response.KakaoProfileResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +15,9 @@ public class KakaoAuthService {
     private final static String DEFAULT_GRANT_TYPE = "authorization_code";
     private final KakaoAuthClient kakaoAuthClient;
 
+    @Value("${kakao.api.rest-api-key}")
     private String restApiKey;
+    @Value("${kakao.api.login-oauth.redirect-url}")
     private String redirectUri;
 
     public String getAuthorizationRedirectUrl() {
