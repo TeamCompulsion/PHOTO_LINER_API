@@ -23,7 +23,6 @@ public class KakaoAuthClient {
 
     public KakaoOauthTokenResponse getOauthToken(KakaoOauthTokenRequest request) {
         return getWebClient(GET_OAUTH_TOKEN_URL).post()
-                .uri(ub -> ub.path("/oauth/token").build())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .acceptCharset(StandardCharsets.UTF_8)
                 .bodyValue(request)
