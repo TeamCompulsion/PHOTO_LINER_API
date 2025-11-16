@@ -1,0 +1,8 @@
+package kr.kro.photoliner.domain.user.repository;
+
+import kr.kro.photoliner.domain.user.model.User;
+import org.springframework.data.repository.Repository;
+
+public interface UserRepository extends Repository<User, Long> {
+    boolean existsByEmail(String email);
+}
