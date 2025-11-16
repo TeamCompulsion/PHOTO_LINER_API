@@ -1,4 +1,4 @@
-package kr.kro.photoliner.domain.photo.service;
+package kr.kro.photoliner.domain.photo.infra;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class ExifExtractorService {
+public class ExifExtractor {
 
     private final GeometryFactory geometryFactory;
 

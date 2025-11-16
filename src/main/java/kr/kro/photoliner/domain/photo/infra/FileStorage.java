@@ -1,4 +1,4 @@
-package kr.kro.photoliner.domain.photo.service;
+package kr.kro.photoliner.domain.photo.infra;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class FileStorageService {
+public class FileStorage {
 
     private final Path uploadLocation;
 
-    public FileStorageService(@Value("${photo.upload.base-dir}") String baseDir) {
+    public FileStorage(@Value("${photo.upload.base-dir}") String baseDir) {
         this.uploadLocation = Paths.get(baseDir)
                 .toAbsolutePath()
                 .normalize();

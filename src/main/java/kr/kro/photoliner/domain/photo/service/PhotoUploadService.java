@@ -5,6 +5,8 @@ import java.util.Optional;
 import kr.kro.photoliner.domain.photo.dto.ExifData;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse.UploadedPhotoInfo;
+import kr.kro.photoliner.domain.photo.infra.ExifExtractor;
+import kr.kro.photoliner.domain.photo.infra.FileStorage;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.domain.user.model.User;
@@ -18,16 +20,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class PhotoUploadService {
 
-    private final FileStorageService fileStorageService;
-    private final ExifExtractorService exifExtractorService;
+    private final FileStorage fileStorage;
+    private final ExifExtractor exifExtractor;
     private final PhotoRepository photoRepository;
 
     @Transactional
     public PhotoUploadResponse uploadPhotos(Long userId, List<MultipartFile> files) {
         List<UploadedPhotoInfo> uploadedPhotos = files.stream()
                 .map(file -> {
-                    ExifData exifData = exifExtractorService.extractExifData(file);
-                    String filePath = fileStorageService.store(file);
+                    ExifData exifData = exifExtractor.extractExifData(file);
+                    String filePath = fileStorage.store(file);
                     User user = User.builder()
                             .id(userId)
                             .build();
