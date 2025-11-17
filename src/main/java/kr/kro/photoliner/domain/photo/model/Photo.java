@@ -55,4 +55,12 @@ public class Photo extends BaseEntity {
         LocalDate capturedDate = capturedDt.toLocalDate();
         return capturedDate.isAfter(start) && capturedDate.isBefore(end);
     }
+
+    public void updateCapturedDate(LocalDateTime capturedDt) {
+        this.capturedDt = capturedDt;
+    }
+
+    public void updateLocation(Point location) {
+        this.location = location;
+    }
 }
