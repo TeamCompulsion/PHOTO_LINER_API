@@ -37,13 +37,22 @@ dependencies {
     implementation 'org.locationtech.jts:jts-core:1.19.0'
 
     // Swagger-ui
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
     // EXIF metadata extraction
     implementation 'com.drewnoakes:metadata-extractor:2.19.0'
 
     // File type validation
     implementation 'org.apache.tika:tika-core:2.9.1'
+
+    // BOM
+    implementation platform('io.awspring.cloud:spring-cloud-aws-dependencies:3.2.1')
+
+    // 사용하려는 프레임워크 모듈
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
+
+    // AWS 자격 증명
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter'
 }
 
 tasks.named('test') {
