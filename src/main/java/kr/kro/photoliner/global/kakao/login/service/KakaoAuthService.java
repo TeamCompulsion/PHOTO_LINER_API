@@ -42,10 +42,10 @@ public class KakaoAuthService {
     }
 
 
-    private String createAuthorizationRedirectUri(String restApiKey, String redirectUri) {
+    private String createAuthorizationRedirectUri(String restApiKey, String redirectUrlWhenComplete) {
         return KakaoApiUrlConstant.AUTHORIZATION_REDIRECT_URL
                 + "?response_type=code"
                 + "&client_id=" + restApiKey
-                + "&redirect_uri=" + redirectUri;
+                + "&redirect_uri=" + redirectUrlWhenComplete;
     }
 }
