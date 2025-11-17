@@ -8,6 +8,7 @@ import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
+import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import kr.kro.photoliner.domain.photo.service.PhotoUploadService;
 import lombok.RequiredArgsConstructor;

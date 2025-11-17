@@ -17,16 +17,16 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ExifExtractor {
 
     private final GeometryFactory geometryFactory;
 
-    public ExifData extractExifData(MultipartFile file) {
+    public ExifData extract(MultipartFile file) {
         try (InputStream inputStream = file.getInputStream()) {
             Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
             LocalDateTime capturedDt = extractCapturedDateTime(metadata);
