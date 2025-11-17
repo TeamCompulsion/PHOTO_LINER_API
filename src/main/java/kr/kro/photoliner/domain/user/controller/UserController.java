@@ -23,7 +23,7 @@ public class UserController {
     @GetMapping("/login/kakao")
     public ResponseEntity<JwtResponse> login(@RequestParam(value = "code") String authorizationCode) {
         return ResponseEntity
-                .ok(userService.getAccessToken(authorizationCode));
+                .ok(userService.oAuthLogin(authorizationCode));
     }
 
     @GetMapping("/login/kakao/authorization")

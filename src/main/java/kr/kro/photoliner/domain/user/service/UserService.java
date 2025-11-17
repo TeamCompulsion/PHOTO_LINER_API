@@ -15,7 +15,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final KakaoAuthService kakaoAuthService;
 
-    public JwtResponse getAccessToken(String authorizationCode) {
+    public JwtResponse oAuthLogin(String authorizationCode) {
         KakaoOauthTokenResponse tokenResponse = kakaoAuthService.getTokenByAuthorizationCode(authorizationCode);
         KakaoProfileResponse profileResponse = kakaoAuthService.getKakaoUserProfile(
                 tokenResponse.accessToken());
