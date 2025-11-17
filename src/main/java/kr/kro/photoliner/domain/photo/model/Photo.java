@@ -9,39 +9,42 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
 
 @Entity
 @Table(name = "photos")
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Photo extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @NotNull
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
-    @NonNull
+    @NotNull
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
-    @NonNull
-    @Column(name = "captured_dt", nullable = false)
+    @Column(name = "captured_dt")
     private LocalDateTime capturedDt;
 
-    @NonNull
-    @Column(name = "location", nullable = false)
+    @Column(name = "location")
     private Point location;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
