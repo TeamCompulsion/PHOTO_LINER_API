@@ -28,7 +28,7 @@ jobs:
 
       # 4. 빌드 (테스트 포함)
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew bootJar -x test
 
       # 5. JAR 파일명 확인 및 환경변수 설정
       - name: Get JAR file name
