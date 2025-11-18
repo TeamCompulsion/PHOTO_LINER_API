@@ -47,15 +47,13 @@ public class PhotoService {
 
     @Transactional
     public void updatePhotoCapturedDate(Long photoId, PhotoCapturedDateUpdateRequest request) {
-        Photo photo = photoRepository.findById(photoId)
-                .orElseThrow(() -> new IllegalArgumentException("사진을 찾을 수 없습니다. ID: " + photoId));
+        Photo photo = photoRepository.getById(photoId);
         photo.updateCapturedDate(request.capturedDt());
     }
 
     @Transactional
     public void updatePhotoLocation(Long photoId, PhotoLocationUpdateRequest request) {
-        Photo photo = photoRepository.findById(photoId)
-                .orElseThrow(() -> new IllegalArgumentException("사진을 찾을 수 없습니다. ID: " + photoId));
+        Photo photo = photoRepository.getById(photoId);
         Point location = geometryFactory.createPoint(
                 new Coordinate(request.longitude(), request.latitude())
         );

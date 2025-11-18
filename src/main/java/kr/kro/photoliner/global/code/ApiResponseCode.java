@@ -38,6 +38,7 @@ public enum ApiResponseCode {
      * 404 Not Found (리소스를 찾을 수 없음)
      */
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."),
+    NOT_FOUND_PHOTO(HttpStatus.NOT_FOUND, "사진이 존재하지 않습니다."),
 
     /**
      * 409 CONFLICT (중복 혹은 충돌)
