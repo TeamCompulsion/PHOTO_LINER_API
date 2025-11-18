@@ -37,7 +37,7 @@ out/
 ### VS Code ###
 .vscode/
 
-**/application.yml
+**/application-local.yml
 **/application.properties
 
 /lib/
