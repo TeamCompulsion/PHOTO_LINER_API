@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
-import kr.kro.photoliner.global.code.ApiResponseCode;
-import kr.kro.photoliner.global.exception.CustomException;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,9 +38,4 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     Photo save(Photo photo);
 
     Optional<Photo> findById(Long photoId);
-
-    default Photo getById(Long photoId) {
-        return findById(photoId)
-                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_PHOTO, "photo id: " + photoId));
-    }
 }
