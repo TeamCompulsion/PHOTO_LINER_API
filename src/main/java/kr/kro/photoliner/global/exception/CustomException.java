@@ -38,6 +38,5 @@ public class CustomException extends RuntimeException {
             return super.getMessage();
         }
         return String.format("%s: %s", getMessage(), detail);
-
     }
 }

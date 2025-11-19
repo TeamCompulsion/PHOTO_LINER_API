@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Object> handlePhotoUploadException(
             HttpServletRequest request,

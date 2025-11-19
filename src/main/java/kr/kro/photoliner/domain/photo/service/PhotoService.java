@@ -34,7 +34,7 @@ public class PhotoService {
         Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
-        Photos photos = photoRepository.findPhotosByUserIdInBox(request.userId(), sw, ne);
+        Photos photos = photoRepository.getPhotosByUserIdInBox(request.userId(), sw, ne);
 
         return MapMarkersResponse.of(
                 photos.filterInDate(request.from(), request.to()),

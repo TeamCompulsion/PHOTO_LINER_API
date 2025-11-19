@@ -1,6 +1,7 @@
 package kr.kro.photoliner.domain.photo.repository;
 
 import java.util.List;
+import java.util.Optional;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.global.code.ApiResponseCode;
@@ -26,15 +27,14 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
               and function('st_y', p.location) between function('st_y', :sw) and function('st_y', :ne)
             order by p.capturedDt desc
             """)
-    Optional<List<Photo>> findByUserIdInBox(
+    List<Photo> findByUserIdInBox(
             Long userId,
             Point sw,
             Point ne
     );
 
-    default Photos findPhotosByUserIdInBox(Long userId, Point sw, Point ne) {
-        return new Photos(findByUserIdInBox(userId, sw, ne)
-                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_PHOTO, "user id: " + userId)));
+    default Photos getPhotosByUserIdInBox(Long userId, Point sw, Point ne) {
+        return new Photos(findByUserIdInBox(userId, sw, ne));
     }
 
     Photo save(Photo photo);
