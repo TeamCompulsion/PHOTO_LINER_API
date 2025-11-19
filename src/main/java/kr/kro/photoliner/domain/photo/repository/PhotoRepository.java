@@ -1,15 +1,14 @@
 package kr.kro.photoliner.domain.photo.repository;
 
 import java.util.List;
-import java.util.Optional;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 
-public interface PhotoRepository extends Repository<Photo, Long> {
+public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     List<Photo> findByUserId(
             Long userId,
@@ -37,8 +36,4 @@ public interface PhotoRepository extends Repository<Photo, Long> {
     default Photos findPhotosByUserIdInBox(Long userId, Point sw, Point ne) {
         return new Photos(findByUserIdInBox(userId, sw, ne));
     }
-
-    Photo save(Photo photo);
-
-    Optional<Photo> findById(Long photoId);
 }

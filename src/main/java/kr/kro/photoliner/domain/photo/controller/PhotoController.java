@@ -2,19 +2,20 @@ package kr.kro.photoliner.domain.photo.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import kr.kro.photoliner.domain.photo.service.PhotoUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +71,14 @@ public class PhotoController {
             @Valid @RequestBody PhotoLocationUpdateRequest request
     ) {
         photoService.updatePhotoLocation(photoId, request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletePhoto(
+            @Valid @RequestBody DeletePhotosRequest request
+    ) {
+        photoService.deletePhotos(request);
         return ResponseEntity.noContent().build();
     }
 }
