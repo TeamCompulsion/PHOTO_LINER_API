@@ -37,6 +37,7 @@ public class PhotoUploadService {
                             .orElseThrow(
                                     () -> CustomException.of(ApiResponseCode.NOT_FOUND_USER, "user id: " + userId));
                     Photo photo = createPhoto(user, exifData, filePath, fileName);
+                            .orElseThrow(RuntimeException::new);
                     Photo savedPhoto = photoRepository.save(photo);
                     return InnerUploadedPhotoInfo.from(savedPhoto);
                 })

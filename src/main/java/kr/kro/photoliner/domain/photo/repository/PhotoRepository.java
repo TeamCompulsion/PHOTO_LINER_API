@@ -1,27 +1,22 @@
 package kr.kro.photoliner.domain.photo.repository;
 
 import java.util.List;
-import java.util.Optional;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.global.code.ApiResponseCode;
 import kr.kro.photoliner.global.exception.CustomException;
 import org.locationtech.jts.geom.Point;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 
-public interface PhotoRepository extends Repository<Photo, Long> {
+public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
-    Optional<List<Photo>> findByUserId(
+    Page<Photo> findByUserId(
             Long userId,
             Pageable pageable
     );
-
-    default Photos findPhotosByUserId(Long userId, Pageable pageable) {
-        return new Photos(findByUserId(userId, pageable)
-                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_PHOTO, "user id: " + userId)));
-    }
 
     @Query("""
             select p

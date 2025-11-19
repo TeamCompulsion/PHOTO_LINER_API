@@ -8,3 +8,6 @@ spring:
 photo:
   upload:
     base-dir: url
+
+cors:
+  allow-url: url
