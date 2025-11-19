@@ -10,8 +10,8 @@ create table if not exists albums
 
 create table if not exists albums_photos
 (
+    id       bigint unsigned auto_increment
+        primary key,
     album_id bigint,
-    photo_id bigint,
-    constraint pk_albums_photos
-        primary key (album_id, photo_id)
+    photo_id bigint
 )
