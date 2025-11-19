@@ -30,8 +30,13 @@ public class PhotoService {
     private final GeometryFactory geometryFactory;
 
     @Transactional(readOnly = true)
-    public PhotosResponse getPhotoList(Long userId, Pageable pageable) {
+    public PhotosResponse getPhotos(Long userId, Pageable pageable) {
         return PhotosResponse.from(photoRepository.findByUserId(userId, pageable));
+    }
+
+    @Transactional(readOnly = true)
+    public PhotosResponse getPhotosByAlbumId(Long userId, Long albumId, Pageable pageable) {
+        return PhotosResponse.from(photoRepository.findByUserIdAndAlbumId(userId, albumId, pageable));
     }
 
     @Transactional(readOnly = true)

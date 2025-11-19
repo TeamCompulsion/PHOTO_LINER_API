@@ -18,6 +18,14 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     );
 
     @Query("""
+                select p
+                from Photo p
+                inner join AlbumPhoto ap on ap.photo.id = p.id
+                where ap.album.id = :albumId
+            """)
+    Page<Photo> findByUserIdAndAlbumId(Long userId, Long albumId, Pageable pageable);
+
+    @Query("""
             select p
             from Photo p
             where p.user.id = :userId
