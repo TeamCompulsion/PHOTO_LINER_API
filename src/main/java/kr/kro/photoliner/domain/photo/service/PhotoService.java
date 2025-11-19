@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +25,8 @@ public class PhotoService {
     private final GeometryFactory geometryFactory;
 
     @Transactional(readOnly = true)
-    public PhotosResponse getPhotoList(Long userId) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
-        Photos photos = photoRepository.findPhotosByUserId(userId, pageable);
-        return PhotosResponse.from(photos);
+    public PhotosResponse getPhotoList(Long userId, Pageable pageable) {
+        return PhotosResponse.from(photoRepository.findByUserId(userId, pageable));
     }
 
     @Transactional(readOnly = true)
