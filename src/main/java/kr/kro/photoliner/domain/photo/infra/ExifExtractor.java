@@ -13,6 +13,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 import kr.kro.photoliner.domain.photo.dto.ExifData;
+import kr.kro.photoliner.global.code.ApiResponseCode;
+import kr.kro.photoliner.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -33,7 +35,8 @@ public class ExifExtractor {
             Point location = extractGpsLocation(metadata);
             return new ExifData(capturedDt, location);
         } catch (ImageProcessingException | IOException e) {
-            throw new RuntimeException(e);
+            throw CustomException.of(ApiResponseCode.FILE_PROCESSING_ERROR, "file name: " + file.getOriginalFilename(),
+                    e);
         }
     }
 

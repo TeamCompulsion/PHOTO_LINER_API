@@ -9,6 +9,8 @@ import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
+import kr.kro.photoliner.global.code.ApiResponseCode;
+import kr.kro.photoliner.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -34,7 +36,7 @@ public class PhotoService {
         Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
-        Photos photos = photoRepository.findPhotosByUserIdInBox(request.userId(), sw, ne);
+        Photos photos = photoRepository.getPhotosByUserIdInBox(request.userId(), sw, ne);
 
         return MapMarkersResponse.of(
                 photos.filterInDate(request.from(), request.to()),
@@ -45,14 +47,14 @@ public class PhotoService {
     @Transactional
     public void updatePhotoCapturedDate(Long photoId, PhotoCapturedDateUpdateRequest request) {
         Photo photo = photoRepository.findById(photoId)
-                .orElseThrow(() -> new IllegalArgumentException("사진을 찾을 수 없습니다. ID: " + photoId));
+                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_PHOTO, "photo id: " + photoId));
         photo.updateCapturedDate(request.capturedDt());
     }
 
     @Transactional
     public void updatePhotoLocation(Long photoId, PhotoLocationUpdateRequest request) {
         Photo photo = photoRepository.findById(photoId)
-                .orElseThrow(() -> new IllegalArgumentException("사진을 찾을 수 없습니다. ID: " + photoId));
+                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_PHOTO, "photo id: " + photoId));
         Point location = geometryFactory.createPoint(
                 new Coordinate(request.longitude(), request.latitude())
         );
