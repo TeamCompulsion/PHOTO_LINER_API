@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.UUID;
+import kr.kro.photoliner.global.code.ApiResponseCode;
+import kr.kro.photoliner.global.exception.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,12 +39,12 @@ public class FileStorage {
 
     private void validateFile(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new IllegalArgumentException("Failed to store empty file");
+            throw CustomException.of(ApiResponseCode.INVALID_FILE);
         }
 
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
-            throw new IllegalArgumentException("Invalid file path: " + originalFilename);
+            throw CustomException.of(ApiResponseCode.INVALID_FILE_NAME, "file name: " + originalFilename);
         }
     }
 
@@ -58,7 +60,7 @@ public class FileStorage {
                 Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to store file: " + file.getOriginalFilename(), e);
+            throw CustomException.of(ApiResponseCode.FILE_STORE_ERROR, "file name: " + file.getOriginalFilename(), e);
         }
     }
 

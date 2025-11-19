@@ -10,6 +10,8 @@ import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.domain.user.model.User;
 import kr.kro.photoliner.domain.user.repository.UserRepository;
+import kr.kro.photoliner.global.code.ApiResponseCode;
+import kr.kro.photoliner.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,8 @@ public class PhotoUploadService {
                     String filePath = fileStorage.store(file);
                     String fileName = file.getOriginalFilename();
                     User user = userRepository.findUserById(userId)
-                            .orElseThrow(RuntimeException::new);
+                            .orElseThrow(
+                                    () -> CustomException.of(ApiResponseCode.NOT_FOUND_USER, "user id: " + userId));
                     Photo photo = createPhoto(user, exifData, filePath, fileName);
                     Photo savedPhoto = photoRepository.save(photo);
                     return InnerUploadedPhotoInfo.from(savedPhoto);
