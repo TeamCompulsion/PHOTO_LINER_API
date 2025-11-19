@@ -12,6 +12,9 @@ import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import kr.kro.photoliner.domain.photo.service.PhotoUploadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +40,10 @@ public class PhotoController {
 
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotoList(
-            @RequestParam Long userId
+            @RequestParam Long userId,
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return ResponseEntity.ok(photoService.getPhotoList(userId));
+        return ResponseEntity.ok(photoService.getPhotoList(userId, pageable));
     }
 
     @GetMapping("/markers")
