@@ -23,6 +23,8 @@ public record PhotosResponse(
             Long id,
             String filePath,
             LocalDateTime capturedDt,
+            double lat,
+            double lng,
             Long userId
     ) {
 
@@ -31,6 +33,8 @@ public record PhotosResponse(
                     photo.getId(),
                     photo.getFilePath(),
                     photo.getCapturedDt(),
+                    photo.getLocation().getY(),
+                    photo.getLocation().getX(),
                     photo.getUser().getId());
         }
     }

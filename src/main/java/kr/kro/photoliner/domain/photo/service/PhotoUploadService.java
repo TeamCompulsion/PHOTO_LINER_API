@@ -33,7 +33,7 @@ public class PhotoUploadService {
                     String fileName = file.getOriginalFilename();
                     User user = userRepository.findUserById(userId)
                             .orElseThrow(RuntimeException::new);
-                    Photo photo = createPhoto(user, exifData, filePath, fileName);
+                    Photo photo = createPhoto(user, exifData, fileName, filePath);
                     Photo savedPhoto = photoRepository.save(photo);
                     return InnerUploadedPhotoInfo.from(savedPhoto);
                 })
