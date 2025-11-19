@@ -1,5 +1,6 @@
 package kr.kro.photoliner.domain.photo.service;
 
+import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
@@ -60,5 +61,10 @@ public class PhotoService {
                 new Coordinate(request.longitude(), request.latitude())
         );
         photo.updateLocation(location);
+    }
+
+    @Transactional
+    public void deletePhotos(DeletePhotosRequest request) {
+        photoRepository.deleteAllByIdInBatch(request.ids());
     }
 }
