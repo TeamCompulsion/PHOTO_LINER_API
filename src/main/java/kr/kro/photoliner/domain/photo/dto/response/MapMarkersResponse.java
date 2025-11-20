@@ -35,8 +35,8 @@ public record MapMarkersResponse(
                 LocalDateTime capturedDt,
                 String filePath,
                 String thumbnailPath,
-                double lat,
-                double lng
+                Double lat,
+                Double lng
         ) {
 
             public static InnerPhotoMarker from(Photo photo) {
@@ -45,8 +45,8 @@ public record MapMarkersResponse(
                         photo.getCapturedDt(),
                         photo.getFilePath(),
                         photo.getThumbnailPath(),
-                        photo.getLocation().getY(),
-                        photo.getLocation().getX()
+                        photo.getLongitude(),
+                        photo.getLatitude()
                 );
             }
         }
@@ -71,8 +71,8 @@ public record MapMarkersResponse(
                 LocalDateTime capturedDt,
                 String filePath,
                 String thumbnailPath,
-                double lat,
-                double lng
+                Double lat,
+                Double lng
         ) {
 
             public static InnerPoiMarker from(Photo photo) {
@@ -81,8 +81,8 @@ public record MapMarkersResponse(
                         photo.getCapturedDt(),
                         photo.getFilePath(),
                         photo.getThumbnailPath(),
-                        photo.getLocation().getY(),
-                        photo.getLocation().getX()
+                        photo.getLongitude(),
+                        photo.getLatitude()
                 );
             }
         }

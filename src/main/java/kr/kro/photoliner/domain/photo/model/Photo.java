@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
@@ -69,5 +70,19 @@ public class Photo extends BaseEntity {
 
     public void updateLocation(Point location) {
         this.location = location;
+    }
+
+    public Double getLatitude() {
+        if (Objects.isNull(location)) {
+            return null;
+        }
+        return location.getX();
+    }
+
+    public Double getLongitude() {
+        if (Objects.isNull(location)) {
+            return null;
+        }
+        return location.getY();
     }
 }
