@@ -34,6 +34,7 @@ public record MapMarkersResponse(
                 Long id,
                 LocalDateTime capturedDt,
                 String filePath,
+                String thumbnailPath,
                 double lat,
                 double lng
         ) {
@@ -43,6 +44,7 @@ public record MapMarkersResponse(
                         photo.getId(),
                         photo.getCapturedDt(),
                         photo.getFilePath(),
+                        photo.getThumbnailPath(),
                         photo.getLocation().getY(),
                         photo.getLocation().getX()
                 );
@@ -67,6 +69,8 @@ public record MapMarkersResponse(
         public record InnerPoiMarker(
                 Long id,
                 LocalDateTime capturedDt,
+                String filePath,
+                String thumbnailPath,
                 double lat,
                 double lng
         ) {
@@ -75,6 +79,8 @@ public record MapMarkersResponse(
                 return new InnerPoiMarker(
                         photo.getId(),
                         photo.getCapturedDt(),
+                        photo.getFilePath(),
+                        photo.getThumbnailPath(),
                         photo.getLocation().getY(),
                         photo.getLocation().getX()
                 );

@@ -45,6 +45,7 @@ public record PhotosResponse(
     public record InnerPhotoResponse(
             Long id,
             String filePath,
+            String thumbnailPath,
             LocalDateTime capturedDt,
             Double lat,
             Double lng,
@@ -56,6 +57,7 @@ public record PhotosResponse(
             return new InnerPhotoResponse(
                     photo.getId(),
                     photo.getFilePath(),
+                    photo.getThumbnailPath(),
                     photo.getCapturedDt(),
                     location.map(Point::getY).orElse(null),
                     location.map(Point::getX).orElse(null),
