@@ -28,15 +28,15 @@ public class PhotoUploadService {
 
     @Transactional
     public PhotoUploadResponse uploadPhotos(Long userId, List<MultipartFile> files) {
+        User user = userRepository.findUserById(userId).orElseThrow(
+                () -> CustomException.of(ApiResponseCode.NOT_FOUND_USER, "user id: " + userId));
         List<InnerUploadedPhotoInfo> uploadedPhotos = files.stream()
                 .map(file -> {
                     ExifData exifData = exifExtractor.extract(file);
                     String filePath = fileStorage.store(file);
+                    String thumbnailPath = fileStorage.storeThumbnail(filePath);
                     String fileName = file.getOriginalFilename();
-                    User user = userRepository.findUserById(userId)
-                            .orElseThrow(
-                                    () -> CustomException.of(ApiResponseCode.NOT_FOUND_USER, "user id: " + userId));
-                    Photo photo = createPhoto(user, exifData, filePath, fileName);
+                    Photo photo = createPhoto(user, exifData, fileName, filePath, thumbnailPath);
                     Photo savedPhoto = photoRepository.save(photo);
                     return InnerUploadedPhotoInfo.from(savedPhoto);
                 })
@@ -44,10 +44,11 @@ public class PhotoUploadService {
         return PhotoUploadResponse.from(uploadedPhotos);
     }
 
-    private Photo createPhoto(User user, ExifData exifData, String fileName, String filePath) {
+    private Photo createPhoto(User user, ExifData exifData, String fileName, String filePath, String thumbnailPath) {
         return Photo.builder()
                 .fileName(fileName)
                 .filePath(filePath)
+                .thumbnailPath(thumbnailPath)
                 .capturedDt(exifData.capturedDt())
                 .location(exifData.location())
                 .user(user)

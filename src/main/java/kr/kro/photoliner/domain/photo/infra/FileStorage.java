@@ -1,5 +1,7 @@
 package kr.kro.photoliner.domain.photo.infra;
 
+import static kr.kro.photoliner.global.code.ApiResponseCode.DIRECTORY_CREATION_FAILED;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -10,6 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 import kr.kro.photoliner.global.code.ApiResponseCode;
 import kr.kro.photoliner.global.exception.CustomException;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,24 +20,49 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FileStorage {
 
-    private final Path uploadLocation;
+    private final Path originalLocation;
+    private final Path thumbnailLocation;
+
+    private static final String ORIGINAL_DIR = "original";
+    private static final String THUMBNAIL_DIR = "thumbnail";
+    private static final String BASE_IMAGES_DIR = "/images";
+
+    private static final int THUMBNAIL_WIDTH = 300;
+    private static final int THUMBNAIL_HEIGHT = 300;
 
     public FileStorage(@Value("${photo.upload.base-dir}") String baseDir) {
-        this.uploadLocation = Paths.get(baseDir)
-                .toAbsolutePath()
-                .normalize();
+        Path rootLocation = Paths.get(baseDir).toAbsolutePath().normalize();
+        this.originalLocation = rootLocation.resolve(ORIGINAL_DIR);
+        this.thumbnailLocation = rootLocation.resolve(THUMBNAIL_DIR);
+
         try {
-            Files.createDirectories(this.uploadLocation);
+            Files.createDirectories(this.originalLocation);
+            Files.createDirectories(this.thumbnailLocation);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to create upload directory", e);
+            throw CustomException.of(DIRECTORY_CREATION_FAILED);
         }
     }
 
     public String store(MultipartFile file) {
         validateFile(file);
         String fileName = generateFileName(file);
-        saveFile(file, fileName);
-        return fileName;
+        saveFile(file, this.originalLocation, fileName);
+        return BASE_IMAGES_DIR + "/" + ORIGINAL_DIR + "/" + fileName;
+    }
+
+    public String storeThumbnail(String originalRelativePath) {
+        String fileName = Paths.get(originalRelativePath).getFileName().toString();
+        Path sourceLocation = this.originalLocation.resolve(fileName);
+        Path targetLocation = this.thumbnailLocation.resolve(fileName);
+
+        try {
+            Thumbnails.of(sourceLocation.toFile())
+                    .size(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT)
+                    .toFile(targetLocation.toFile());
+            return BASE_IMAGES_DIR + "/" + THUMBNAIL_DIR + "/" + fileName;
+        } catch (IOException e) {
+            throw CustomException.of(ApiResponseCode.FILE_STORE_ERROR, "썸네일 이미지 생성 실패", e);
+        }
     }
 
     private void validateFile(MultipartFile file) {
@@ -53,9 +81,9 @@ public class FileStorage {
         return UUID.randomUUID() + "." + extension;
     }
 
-    private void saveFile(MultipartFile file, String fileName) {
+    private void saveFile(MultipartFile file, Path directory, String fileName) {
         try {
-            Path targetLocation = uploadLocation.resolve(fileName);
+            Path targetLocation = directory.resolve(fileName);
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
             }

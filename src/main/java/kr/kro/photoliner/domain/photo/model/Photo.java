@@ -42,6 +42,10 @@ public class Photo extends BaseEntity {
     @Column(name = "file_path", nullable = false)
     private String filePath;
 
+    @NotNull
+    @Column(name = "thumbnail_path", nullable = false)
+    private String thumbnailPath;
+
     @Column(name = "captured_dt")
     private LocalDateTime capturedDt;
 
