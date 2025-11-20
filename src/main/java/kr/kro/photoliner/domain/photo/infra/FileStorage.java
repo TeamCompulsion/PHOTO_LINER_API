@@ -61,7 +61,29 @@ public class FileStorage {
                     .toFile(targetLocation.toFile());
             return BASE_IMAGES_DIR + "/" + THUMBNAIL_DIR + "/" + fileName;
         } catch (IOException e) {
-            throw CustomException.of(ApiResponseCode.FILE_STORE_ERROR, "썸네일 이미지 생성 실패", e);
+            throw CustomException.of(ApiResponseCode.FILE_CREATION_FAILED);
+        }
+    }
+
+    public void deleteOriginalImage(String originalPath) {
+        String fileName = Paths.get(originalPath).getFileName().toString();
+        Path sourceLocation = this.originalLocation.resolve(fileName);
+
+        try {
+            Files.delete(sourceLocation);
+        } catch (IOException e) {
+            throw CustomException.of(ApiResponseCode.FILE_DELETE_FAILED);
+        }
+    }
+
+    public void deleteThumbnailImage(String thumbnailPath) {
+        String fileName = Paths.get(thumbnailPath).getFileName().toString();
+        Path sourceLocation = this.thumbnailLocation.resolve(fileName);
+
+        try {
+            Files.delete(sourceLocation);
+        } catch (IOException e) {
+            throw CustomException.of(ApiResponseCode.FILE_DELETE_FAILED);
         }
     }
 
