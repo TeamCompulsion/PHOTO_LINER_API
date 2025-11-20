@@ -6,8 +6,10 @@ import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
+import kr.kro.photoliner.domain.photo.model.AlbumPhotos;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
+import kr.kro.photoliner.domain.photo.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.global.code.ApiResponseCode;
 import kr.kro.photoliner.global.exception.CustomException;
@@ -23,12 +25,18 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PhotoService {
 
+    private final AlbumPhotoRepository albumPhotoRepository;
     private final PhotoRepository photoRepository;
     private final GeometryFactory geometryFactory;
 
     @Transactional(readOnly = true)
-    public PhotosResponse getPhotoList(Long userId, Pageable pageable) {
+    public PhotosResponse getPhotos(Long userId, Pageable pageable) {
         return PhotosResponse.from(photoRepository.findByUserId(userId, pageable));
+    }
+
+    @Transactional(readOnly = true)
+    public PhotosResponse getPhotosByAlbumId(Long userId, Long albumId, Pageable pageable) {
+        return PhotosResponse.from(photoRepository.findByUserIdAndAlbumId(userId, albumId, pageable));
     }
 
     @Transactional(readOnly = true)
@@ -37,10 +45,11 @@ public class PhotoService {
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
         Photos photos = photoRepository.getPhotosByUserIdInBox(request.userId(), sw, ne);
+        AlbumPhotos albumPhotos = albumPhotoRepository.getByPhotoIdIn(photos.getPhotoIds());
 
         return MapMarkersResponse.of(
-                photos.filterInDate(request.from(), request.to()),
-                photos.filterOutOfDate(request.from(), request.to())
+                albumPhotos.getPhotoIncludedAlbum(request.albumId()),
+                albumPhotos.getPhotoNotIncludedAlbum(request.albumId())
         );
     }
 
