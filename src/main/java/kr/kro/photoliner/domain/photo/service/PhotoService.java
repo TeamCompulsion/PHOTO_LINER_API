@@ -80,8 +80,8 @@ public class PhotoService {
     }
 
     @Transactional(readOnly = true)
-    public PhotosResponse getPhotosByIds(Long userId, List<Long> ids, Pageable pageable) {
-        Page<Photo> photos = photoRepository.findByUserIdAndIdIn(userId, ids, pageable);
+    public PhotosResponse getPhotosByIds(List<Long> ids, Pageable pageable) {
+        Page<Photo> photos = photoRepository.findByIdIn(ids, pageable);
         return PhotosResponse.from(photos);
     }
 }

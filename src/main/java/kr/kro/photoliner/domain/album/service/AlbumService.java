@@ -49,7 +49,7 @@ public class AlbumService {
     public PhotosResponse getAlbumItems(Long userId, Long albumId, Pageable pageable) {
         Album album = albumRepository.findByIdAndUserId(albumId, userId)
                 .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_ALBUM, "album id: " + albumId));
-        return photoService.getPhotosByIds(userId, album.getPhotoIds(), pageable);
+        return photoService.getPhotosByIds(album.getPhotoIds(), pageable);
     }
 
     @Transactional
