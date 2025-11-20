@@ -2,17 +2,18 @@ package kr.kro.photoliner.domain.photo.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import kr.kro.photoliner.domain.photo.model.Photo;
+import kr.kro.photoliner.domain.album.model.view.AlbumPhotoView;
 
 public record MapMarkersResponse(
         InnerPhotoMarkers innerPhotoMarkers,
         InnerPoiMarkers innerPoiMarkers
 ) {
 
-    public static MapMarkersResponse of(List<Photo> photosInDate, List<Photo> photosOutOfDate) {
+    public static MapMarkersResponse of(List<AlbumPhotoView> photosIncludedAlbum,
+                                        List<AlbumPhotoView> photosExcludedAlbum) {
         return new MapMarkersResponse(
-                InnerPhotoMarkers.from(photosInDate),
-                InnerPoiMarkers.from(photosOutOfDate)
+                InnerPhotoMarkers.from(photosIncludedAlbum),
+                InnerPoiMarkers.from(photosExcludedAlbum)
         );
     }
 
@@ -21,7 +22,7 @@ public record MapMarkersResponse(
             List<InnerPhotoMarker> photoMarkers
     ) {
 
-        public static InnerPhotoMarkers from(List<Photo> photos) {
+        public static InnerPhotoMarkers from(List<AlbumPhotoView> photos) {
             return new InnerPhotoMarkers(
                     photos.size(),
                     photos.stream()
@@ -39,7 +40,7 @@ public record MapMarkersResponse(
                 Double lng
         ) {
 
-            public static InnerPhotoMarker from(Photo photo) {
+            public static InnerPhotoMarker from(AlbumPhotoView photo) {
                 return new InnerPhotoMarker(
                         photo.getId(),
                         photo.getCapturedDt(),
@@ -57,7 +58,7 @@ public record MapMarkersResponse(
             List<InnerPoiMarker> markers
     ) {
 
-        public static InnerPoiMarkers from(List<Photo> photos) {
+        public static InnerPoiMarkers from(List<AlbumPhotoView> photos) {
             return new InnerPoiMarkers(
                     photos.size(),
                     photos.stream()
@@ -75,7 +76,7 @@ public record MapMarkersResponse(
                 Double lng
         ) {
 
-            public static InnerPoiMarker from(Photo photo) {
+            public static InnerPoiMarker from(AlbumPhotoView photo) {
                 return new InnerPoiMarker(
                         photo.getId(),
                         photo.getCapturedDt(),

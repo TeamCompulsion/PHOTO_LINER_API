@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import kr.kro.photoliner.common.model.BaseEntity;
-import kr.kro.photoliner.domain.album.model.Album;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -76,10 +75,5 @@ public class Photo extends BaseEntity {
             return null;
         }
         return location.getY();
-    }
-
-    public boolean isIncludedInAlbum(Album album) {
-        return album.getItems().stream()
-                .anyMatch(albumItem -> Objects.equals(albumItem.getPhotoId(), id));
     }
 }

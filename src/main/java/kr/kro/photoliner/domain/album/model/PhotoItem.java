@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,11 +17,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "albums_photos")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AlbumItem {
+@Builder
+public class PhotoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "photo_id", nullable = false)
     private Long photoId;
+
 }

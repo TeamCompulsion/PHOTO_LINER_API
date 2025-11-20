@@ -3,11 +3,13 @@ package kr.kro.photoliner.domain.album.controller;
 import jakarta.validation.Valid;
 import kr.kro.photoliner.domain.album.dto.request.AlbumCreateRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumDeleteRequest;
+import kr.kro.photoliner.domain.album.dto.request.AlbumItemCreateRequest;
+import kr.kro.photoliner.domain.album.dto.request.AlbumItemDeleteRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumTitleUpdateRequest;
 import kr.kro.photoliner.domain.album.dto.response.AlbumCreateResponse;
+import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoItemsResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumsResponse;
 import kr.kro.photoliner.domain.album.service.AlbumService;
-import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -65,11 +67,28 @@ public class AlbumController {
     }
 
     @GetMapping("/{albumId}/photos")
-    public ResponseEntity<PhotosResponse> getAlbumItems(
+    public ResponseEntity<AlbumPhotoItemsResponse> getAlbumItems(
             @PathVariable Long albumId,
-            @RequestParam Long userId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = "capturedDt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return ResponseEntity.ok(albumService.getAlbumItems(userId, albumId, pageable));
+        return ResponseEntity.ok(albumService.getAlbumPhotoItems(albumId, pageable));
+    }
+
+    @PostMapping("/{albumId}/photos")
+    public ResponseEntity<Void> createAlbumItems(
+            @PathVariable Long albumId,
+            @RequestBody @Valid AlbumItemCreateRequest request
+    ) {
+        albumService.createAlbumItems(albumId, request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{albumId}/photos")
+    public ResponseEntity<Void> deleteAlbumItems(
+            @PathVariable Long albumId,
+            @RequestBody @Valid AlbumItemDeleteRequest request
+    ) {
+        albumService.deleteAlbumItems(albumId, request);
+        return ResponseEntity.noContent().build();
     }
 }

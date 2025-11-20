@@ -44,15 +44,17 @@ public class Album extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "album_id")
-    private List<AlbumItem> items = new ArrayList<>();
+    private List<PhotoItem> items = new ArrayList<>();
+
+    public void addItems(List<PhotoItem> items) {
+        this.items.addAll(items);
+    }
 
     public void updateTitle(String title) {
         this.title = title;
     }
 
-    public List<Long> getPhotoIds() {
-        return items.stream()
-                .map(AlbumItem::getPhotoId)
-                .toList();
+    public void removeItems(List<PhotoItem> items) {
+        this.items.removeAll(items);
     }
 }

@@ -1,13 +1,19 @@
 package kr.kro.photoliner.domain.album.service;
 
+import java.util.List;
 import kr.kro.photoliner.domain.album.dto.request.AlbumCreateRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumDeleteRequest;
+import kr.kro.photoliner.domain.album.dto.request.AlbumItemCreateRequest;
+import kr.kro.photoliner.domain.album.dto.request.AlbumItemDeleteRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumTitleUpdateRequest;
 import kr.kro.photoliner.domain.album.dto.response.AlbumCreateResponse;
+import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoItemsResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumsResponse;
 import kr.kro.photoliner.domain.album.model.Album;
+import kr.kro.photoliner.domain.album.model.PhotoItem;
+import kr.kro.photoliner.domain.album.model.view.AlbumPhotoView;
+import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.album.repository.AlbumRepository;
-import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import kr.kro.photoliner.domain.user.model.User;
 import kr.kro.photoliner.domain.user.repository.UserRepository;
@@ -25,6 +31,7 @@ public class AlbumService {
 
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
+    private final AlbumPhotoRepository albumPhotoRepository;
     private final PhotoService photoService;
 
     @Transactional
@@ -46,10 +53,9 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public PhotosResponse getAlbumItems(Long userId, Long albumId, Pageable pageable) {
-        Album album = albumRepository.findByIdAndUserId(albumId, userId)
-                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_ALBUM, "album id: " + albumId));
-        return photoService.getPhotosByIds(album.getPhotoIds(), pageable);
+    public AlbumPhotoItemsResponse getAlbumPhotoItems(Long albumId, Pageable pageable) {
+        Page<AlbumPhotoView> albumPhotoViews = albumPhotoRepository.findByAlbumId(albumId, pageable);
+        return AlbumPhotoItemsResponse.from(albumPhotoViews);
     }
 
     @Transactional
@@ -62,5 +68,25 @@ public class AlbumService {
     @Transactional
     public void deleteAlbums(AlbumDeleteRequest request) {
         albumRepository.deleteAllByIdInBatch(request.ids());
+    }
+
+    @Transactional
+    public void createAlbumItems(Long albumId, AlbumItemCreateRequest request) {
+        Album album = albumRepository.findById(albumId)
+                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_ALBUM, "album id: " + albumId));
+        List<PhotoItem> photoItems = request.ids().stream()
+                .map(id -> PhotoItem.builder().photoId(id).build())
+                .toList();
+        album.addItems(photoItems);
+    }
+
+    @Transactional
+    public void deleteAlbumItems(Long albumId, AlbumItemDeleteRequest request) {
+        Album album = albumRepository.findById(albumId)
+                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_ALBUM, "album id: " + albumId));
+        List<PhotoItem> photoItems = request.ids().stream()
+                .map(id -> PhotoItem.builder().photoId(id).build())
+                .toList();
+        album.removeItems(photoItems);
     }
 }

@@ -17,7 +17,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
             Pageable pageable
     );
 
-    Page<Photo> findByIdIn(List<Long> ids, Pageable pageable);
+    List<Photo> findByIdIn(List<Long> ids);
 
     @Query("""
             select p
