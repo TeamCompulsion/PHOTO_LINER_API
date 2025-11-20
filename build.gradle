@@ -56,6 +56,9 @@ dependencies {
 
     // 액추에이터 추가
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // 썸네일 라이브러리
+    implementation 'net.coobird:thumbnailator:0.4.20'
 }
 
 tasks.named('test') {

@@ -1,11 +1,13 @@
 package kr.kro.photoliner.domain.photo.service;
 
+import java.util.List;
 import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
+import kr.kro.photoliner.domain.photo.infra.FileStorage;
 import kr.kro.photoliner.domain.photo.model.AlbumPhotos;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
@@ -28,6 +30,7 @@ public class PhotoService {
     private final AlbumPhotoRepository albumPhotoRepository;
     private final PhotoRepository photoRepository;
     private final GeometryFactory geometryFactory;
+    private final FileStorage fileStorage;
 
     @Transactional(readOnly = true)
     public PhotosResponse getPhotos(Long userId, Pageable pageable) {
@@ -72,6 +75,9 @@ public class PhotoService {
 
     @Transactional
     public void deletePhotos(DeletePhotosRequest request) {
+        List<Photo> photos = photoRepository.findAllById(request.ids());
+        photos.forEach(photo -> fileStorage.deleteOriginalImage(photo.getFilePath()));
+        photos.forEach(photo -> fileStorage.deleteThumbnailImage(photo.getFilePath()));
         photoRepository.deleteAllByIdInBatch(request.ids());
     }
 }
