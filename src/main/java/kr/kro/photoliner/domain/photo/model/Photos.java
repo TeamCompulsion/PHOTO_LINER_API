@@ -1,6 +1,7 @@
 package kr.kro.photoliner.domain.photo.model;
 
 import java.util.List;
+import kr.kro.photoliner.domain.album.model.Album;
 
 public record Photos(
         List<Photo> photos
@@ -10,9 +11,16 @@ public record Photos(
         return photos.size();
     }
 
-    public List<Long> getPhotoIds() {
+    public List<Photo> filterInAlbum(Album album) {
         return photos.stream()
-                .map(Photo::getId)
+                .filter(photo -> photo.isIncludedInAlbum(album))
                 .toList();
     }
+
+    public List<Photo> filterOutOfAlbum(Album album) {
+        return photos.stream()
+                .filter(photo -> !photo.isIncludedInAlbum(album))
+                .toList();
+    }
+
 }

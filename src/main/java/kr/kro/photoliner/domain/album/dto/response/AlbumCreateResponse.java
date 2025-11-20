@@ -10,7 +10,7 @@ public record AlbumCreateResponse(
         return new AlbumCreateResponse(
                 new InnerAlbum(
                         album.getId(),
-                        album.getName()
+                        album.getTitle()
                 )
         );
     }

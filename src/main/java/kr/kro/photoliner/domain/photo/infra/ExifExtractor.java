@@ -35,7 +35,7 @@ public class ExifExtractor {
             Point location = extractGpsLocation(metadata);
             return new ExifData(capturedDt, location);
         } catch (ImageProcessingException | IOException e) {
-            throw CustomException.of(ApiResponseCode.FILE_PROCESSING_ERROR, "file name: " + file.getOriginalFilename(),
+            throw CustomException.of(ApiResponseCode.FILE_PROCESSING_ERROR, "file title: " + file.getOriginalFilename(),
                     e);
         }
     }

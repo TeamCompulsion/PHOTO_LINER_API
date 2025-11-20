@@ -10,11 +10,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 import kr.kro.photoliner.common.model.BaseEntity;
+import kr.kro.photoliner.domain.album.model.Album;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -57,13 +56,6 @@ public class Photo extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public boolean isBetween(LocalDate start, LocalDate end) {
-        return Optional.ofNullable(capturedDt)
-                .map(LocalDateTime::toLocalDate)
-                .filter(localDate -> localDate.isAfter(start) && localDate.isBefore(end))
-                .isPresent();
-    }
-
     public void updateCapturedDate(LocalDateTime capturedDt) {
         this.capturedDt = capturedDt;
     }
@@ -84,5 +76,10 @@ public class Photo extends BaseEntity {
             return null;
         }
         return location.getY();
+    }
+
+    public boolean isIncludedInAlbum(Album album) {
+        return album.getItems().stream()
+                .anyMatch(albumItem -> Objects.equals(albumItem.getPhotoId(), id));
     }
 }

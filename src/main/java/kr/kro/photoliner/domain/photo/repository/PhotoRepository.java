@@ -17,13 +17,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
             Pageable pageable
     );
 
-    @Query("""
-                select p
-                from Photo p
-                inner join AlbumPhoto ap on ap.photo.id = p.id
-                where ap.album.id = :albumId
-            """)
-    Page<Photo> findByUserIdAndAlbumId(Long userId, Long albumId, Pageable pageable);
+    Page<Photo> findByUserIdAndIdIn(Long user_id, List<Long> ids, Pageable pageable);
 
     @Query("""
             select p
@@ -46,4 +40,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     Photo save(Photo photo);
 
     Optional<Photo> findById(Long photoId);
+
+
 }
