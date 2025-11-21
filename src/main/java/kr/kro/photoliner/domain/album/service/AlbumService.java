@@ -14,7 +14,6 @@ import kr.kro.photoliner.domain.album.model.PhotoItem;
 import kr.kro.photoliner.domain.album.model.view.AlbumPhotoView;
 import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.album.repository.AlbumRepository;
-import kr.kro.photoliner.domain.photo.service.PhotoService;
 import kr.kro.photoliner.domain.user.model.User;
 import kr.kro.photoliner.domain.user.repository.UserRepository;
 import kr.kro.photoliner.global.code.ApiResponseCode;
@@ -32,7 +31,6 @@ public class AlbumService {
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
     private final AlbumPhotoRepository albumPhotoRepository;
-    private final PhotoService photoService;
 
     @Transactional
     public AlbumCreateResponse createAlbum(AlbumCreateRequest request) {
