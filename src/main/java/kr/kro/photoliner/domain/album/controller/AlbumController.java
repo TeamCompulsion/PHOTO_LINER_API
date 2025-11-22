@@ -71,7 +71,7 @@ public class AlbumController {
     @GetMapping("/{albumId}/photos")
     public ResponseEntity<AlbumPhotoItemsResponse> getAlbumItems(
             @PathVariable Long albumId,
-            @PageableDefault(sort = "capturedDt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault Pageable pageable
     ) {
         return ResponseEntity.ok(albumService.getAlbumPhotoItems(albumId, pageable));
     }
