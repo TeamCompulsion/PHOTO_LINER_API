@@ -7,9 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import kr.kro.photoliner.domain.photo.model.Photo;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "albums_photos")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class PhotoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +30,6 @@ public class PhotoItem {
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;
 
-    @ManyToOne
     @JoinColumn(name = "photo_id", nullable = false)
-    private Photo photo;
-
-    public PhotoItem(Photo photo) {
-        this.photo = photo;
-    }
+    private Long photoId;
 }

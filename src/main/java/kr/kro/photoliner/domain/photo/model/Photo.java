@@ -8,15 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import kr.kro.photoliner.common.model.BaseEntity;
-import kr.kro.photoliner.domain.album.model.PhotoItem;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -58,9 +54,6 @@ public class Photo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
-    @OneToMany(mappedBy = "photo")
-    private List<PhotoItem> items = new ArrayList<>();
 
     public void updateCapturedDate(LocalDateTime capturedDt) {
         this.capturedDt = capturedDt;
