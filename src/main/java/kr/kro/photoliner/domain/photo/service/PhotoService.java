@@ -1,16 +1,16 @@
 package kr.kro.photoliner.domain.photo.service;
 
 import java.util.List;
-import kr.kro.photoliner.domain.album.model.view.AlbumPhotoViews;
 import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
-import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
-import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
+import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
-import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
+import kr.kro.photoliner.domain.photo.dto.request.PhotoMarkersRequest;
+import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.infra.FileStorage;
 import kr.kro.photoliner.domain.photo.model.Photo;
+import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.global.code.ApiResponseCode;
 import kr.kro.photoliner.global.exception.CustomException;
@@ -37,16 +37,13 @@ public class PhotoService {
     }
 
     @Transactional(readOnly = true)
-    public MapMarkersResponse getMarkersInViewport(MapMarkersRequest request) {
+    public PhotoMarkersResponse getPhotoMarkers(PhotoMarkersRequest request) {
         Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
-        AlbumPhotoViews albumPhotoViews = albumPhotoRepository.getByUserIdInBox(request.userId(), sw, ne);
+        Photos photos = photoRepository.getByUserIdInBox(request.userId(), sw, ne);
 
-        return MapMarkersResponse.of(
-                albumPhotoViews.filterIncludedInAlbum(request.albumId()),
-                albumPhotoViews.filterExcludedFromAlbum(request.albumId())
-        );
+        return PhotoMarkersResponse.from(photos);
     }
 
     @Transactional

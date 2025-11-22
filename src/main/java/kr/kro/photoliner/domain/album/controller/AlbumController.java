@@ -5,9 +5,11 @@ import kr.kro.photoliner.domain.album.dto.request.AlbumCreateRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumDeleteRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumItemCreateRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumItemDeleteRequest;
+import kr.kro.photoliner.domain.album.dto.request.AlbumPhotoMarkersRequest;
 import kr.kro.photoliner.domain.album.dto.request.AlbumTitleUpdateRequest;
 import kr.kro.photoliner.domain.album.dto.response.AlbumCreateResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoItemsResponse;
+import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoMarkersResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumsResponse;
 import kr.kro.photoliner.domain.album.service.AlbumService;
 import lombok.RequiredArgsConstructor;
@@ -90,5 +92,13 @@ public class AlbumController {
     ) {
         albumService.deleteAlbumItems(albumId, request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{albumId}/markers")
+    public ResponseEntity<AlbumPhotoMarkersResponse> getAlbumPhotoMarkers(
+            @PathVariable Long albumId,
+            @RequestBody @Valid AlbumPhotoMarkersRequest request
+    ) {
+        return ResponseEntity.ok(albumService.getAlbumPhotoMarkers(albumId, request));
     }
 }

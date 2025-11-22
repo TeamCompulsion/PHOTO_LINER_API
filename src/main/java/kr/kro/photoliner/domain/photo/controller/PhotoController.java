@@ -2,11 +2,11 @@ package kr.kro.photoliner.domain.photo.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
-import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
+import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
-import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
+import kr.kro.photoliner.domain.photo.dto.request.PhotoMarkersRequest;
+import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
@@ -47,8 +47,8 @@ public class PhotoController {
     }
 
     @GetMapping("/markers")
-    public ResponseEntity<MapMarkersResponse> getMarkersInViewport(@Valid MapMarkersRequest request) {
-        return ResponseEntity.ok(photoService.getMarkersInViewport(request));
+    public ResponseEntity<PhotoMarkersResponse> getPhotoMarkers(@Valid PhotoMarkersRequest request) {
+        return ResponseEntity.ok(photoService.getPhotoMarkers(request));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
