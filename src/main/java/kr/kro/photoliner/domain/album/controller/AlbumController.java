@@ -97,7 +97,7 @@ public class AlbumController {
     @GetMapping("/{albumId}/markers")
     public ResponseEntity<AlbumPhotoMarkersResponse> getAlbumPhotoMarkers(
             @PathVariable Long albumId,
-            @RequestBody @Valid AlbumPhotoMarkersRequest request
+            @Valid AlbumPhotoMarkersRequest request
     ) {
         return ResponseEntity.ok(albumService.getAlbumPhotoMarkers(albumId, request));
     }
