@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,9 @@ public class PhotoService {
     private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
     private final S3CustomClient s3CustomClient;
+
+    @Value("${cloud.aws.cdn.base-url}")
+    private String cdnURL;
 
     private static final String ORIGINAL_BASE_PATH = "/images/original/";
     private static final String THUMBNAIL_BASE_PATH = "/images/thumb/";
@@ -59,8 +63,8 @@ public class PhotoService {
                 .map(photo -> Photo.builder()
                         .userId(request.userId())
                         .fileName(photo.fileName())
-                        .filePath(ORIGINAL_BASE_PATH + photo.uploadFileName())
-                        .thumbnailPath(THUMBNAIL_BASE_PATH + photo.uploadFileName())
+                        .filePath(cdnURL + ORIGINAL_BASE_PATH + photo.uploadFileName())
+                        .thumbnailPath(cdnURL + THUMBNAIL_BASE_PATH + photo.uploadFileName())
                         .capturedDt(photo.capturedDate())
                         .location(geometryFactory.createPoint(photo.convertToGeo()))
                         .build()

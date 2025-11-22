@@ -3,6 +3,8 @@ spring:
     import:
       - "aws-parameterstore:/PHOTO_LINER_API/rds/dev/"
       - "aws-parameterstore:/PHOTO_LINER_API/ec2/dev/"
+      - "aws-parameterstore:/PHOTO_LINER_API/cdn/dev/"
+      - "aws-parameterstore:/PHOTO_LINER_API/s3/dev/"
 
   cloud:
     aws:
@@ -20,3 +22,12 @@ photo:
 
 cors:
   allow-url: ${CORS_ALLOW_URL}
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: ${BUCKET-NAME}
+    cdn:
+      base-url: ${CDN-URL}

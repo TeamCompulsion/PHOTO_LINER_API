@@ -1,5 +1,4 @@
 spring:
-
   datasource:
     url: url
     username: username
@@ -11,3 +10,12 @@ photo:
 
 cors:
   allow-url: url
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: name
+    cdn:
+      base-url: url
