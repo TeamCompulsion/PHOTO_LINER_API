@@ -11,7 +11,7 @@ import kr.kro.photoliner.domain.photo.dto.request.PresignedUrlRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PresignedUrlResponse;
-import kr.kro.photoliner.domain.photo.infra.S3Client;
+import kr.kro.photoliner.domain.photo.infra.S3CustomClient;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PhotoController {
 
     private final PhotoService photoService;
-    private final S3Client s3Client;
+    private final S3CustomClient s3CustomClient;
 
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotos(
@@ -55,7 +55,7 @@ public class PhotoController {
     public ResponseEntity<List<PresignedUrlResponse>> getPresignedUrls(
             @Valid @RequestBody List<PresignedUrlRequest> requests
     ) {
-        List<PresignedUrlResponse> responses = s3Client.generatePresignedUrls(requests);
+        List<PresignedUrlResponse> responses = s3CustomClient.generatePresignedUrls(requests);
         return ResponseEntity.ok(responses);
     }
 

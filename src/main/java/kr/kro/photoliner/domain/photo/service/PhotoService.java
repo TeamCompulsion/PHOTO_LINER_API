@@ -10,7 +10,7 @@ import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.infra.S3Client;
+import kr.kro.photoliner.domain.photo.infra.S3CustomClient;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.global.code.ApiResponseCode;
@@ -30,7 +30,7 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
-    private final S3Client s3Client;
+    private final S3CustomClient s3CustomClient;
 
     private static final String ORIGINAL_BASE_PATH = "/images/original/";
     private static final String THUMBNAIL_BASE_PATH = "/images/thumb/";
@@ -88,8 +88,8 @@ public class PhotoService {
     @Transactional
     public void deletePhotos(DeletePhotosRequest request) {
         List<Photo> photos = photoRepository.findAllById(request.ids());
-        photos.forEach(photo -> s3Client.delete(photo.getFilePath()));
-        photos.forEach(photo -> s3Client.delete(photo.getThumbnailPath()));
+        photos.forEach(photo -> s3CustomClient.delete(photo.getFilePath()));
+        photos.forEach(photo -> s3CustomClient.delete(photo.getThumbnailPath()));
         photoRepository.deleteAllByIdInBatch(request.ids());
     }
 }
