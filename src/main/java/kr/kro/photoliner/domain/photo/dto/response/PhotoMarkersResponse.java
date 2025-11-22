@@ -34,8 +34,8 @@ public record PhotoMarkersResponse(
                     photo.getFilePath(),
                     photo.getThumbnailPath(),
                     photo.getCapturedDt(),
-                    photo.getLongitude(),
-                    photo.getLatitude()
+                    photo.getLatitude(),
+                    photo.getLongitude()
             );
         }
     }
