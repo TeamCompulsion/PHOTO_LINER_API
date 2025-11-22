@@ -38,7 +38,7 @@ public interface AlbumPhotoRepository extends JpaRepository<PhotoItem, Long> {
                             p.location
                         )
                         from PhotoItem pi
-                        left outer join Photo p on p.id = pi.photoId
+                        inner join Photo p on p.id = pi.photoId
                         where pi.album.id = :albumId
                             and function('st_x', p.location) between function('st_x', :sw) and function('st_x', :ne)
                             and function('st_y', p.location) between function('st_y', :sw) and function('st_y', :ne)
