@@ -5,12 +5,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.locationtech.jts.geom.Coordinate;
 
-public record MapMarkersRequest(
+public record PhotoMarkersRequest(
         @NotNull @Min(0)
         Long userId,
-
-        @NotNull @Min(0)
-        Long albumId,
 
         @Min(0) @Max(90)
         double swLat,

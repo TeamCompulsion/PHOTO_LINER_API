@@ -67,13 +67,13 @@ public class Photo extends BaseEntity {
         if (Objects.isNull(location)) {
             return null;
         }
-        return location.getX();
+        return location.getY();
     }
 
     public Double getLongitude() {
         if (Objects.isNull(location)) {
             return null;
         }
-        return location.getY();
+        return location.getX();
     }
 }

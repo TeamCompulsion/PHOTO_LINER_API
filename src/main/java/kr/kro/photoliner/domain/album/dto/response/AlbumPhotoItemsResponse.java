@@ -2,14 +2,14 @@ package kr.kro.photoliner.domain.album.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import kr.kro.photoliner.domain.album.model.view.AlbumPhotoView;
+import kr.kro.photoliner.domain.album.dto.AlbumPhotoItem;
 import org.springframework.data.domain.Page;
 
 public record AlbumPhotoItemsResponse(
         List<InnerAlbumPhotoItem> items
 ) {
 
-    public static AlbumPhotoItemsResponse from(Page<AlbumPhotoView> albumPhotoViews) {
+    public static AlbumPhotoItemsResponse from(Page<AlbumPhotoItem> albumPhotoViews) {
         return new AlbumPhotoItemsResponse(
                 albumPhotoViews.stream()
                         .map(InnerAlbumPhotoItem::from)
@@ -26,14 +26,14 @@ public record AlbumPhotoItemsResponse(
             LocalDateTime capturedDt
     ) {
 
-        public static InnerAlbumPhotoItem from(AlbumPhotoView albumPhotoView) {
+        public static InnerAlbumPhotoItem from(AlbumPhotoItem albumPhotoItem) {
             return new InnerAlbumPhotoItem(
-                    albumPhotoView.getId(),
-                    albumPhotoView.getPhotoId(),
-                    albumPhotoView.getFileName(),
-                    albumPhotoView.getFilePath(),
-                    albumPhotoView.getThumbnailPath(),
-                    albumPhotoView.getCapturedDt()
+                    albumPhotoItem.id(),
+                    albumPhotoItem.photoId(),
+                    albumPhotoItem.fileName(),
+                    albumPhotoItem.filePath(),
+                    albumPhotoItem.thumbnailPath(),
+                    albumPhotoItem.capturedDt()
             );
         }
     }
