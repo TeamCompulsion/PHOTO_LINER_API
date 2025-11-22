@@ -44,8 +44,8 @@ public class PhotoService {
         AlbumPhotoViews albumPhotoViews = albumPhotoRepository.getByUserIdInBox(request.userId(), sw, ne);
 
         return MapMarkersResponse.of(
-                albumPhotoViews.filterAlbumIncludedIn(request.albumId()),
-                albumPhotoViews.filterAlbumExcludedFrom(request.albumId())
+                albumPhotoViews.filterIncludedInAlbum(request.albumId()),
+                albumPhotoViews.filterExcludedFromAlbum(request.albumId())
         );
     }
 
