@@ -1,4 +1,4 @@
-package kr.kro.photoliner.domain.photo.dto;
+package kr.kro.photoliner.domain.photo.dto.request;
 
 import java.util.List;
 

@@ -2,15 +2,17 @@ package kr.kro.photoliner.domain.photo.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
+import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
+import kr.kro.photoliner.domain.photo.dto.request.PresignedUrlRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
+import kr.kro.photoliner.domain.photo.dto.response.PresignedUrlResponse;
+import kr.kro.photoliner.domain.photo.infra.S3Client;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
-import kr.kro.photoliner.domain.photo.service.PhotoUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PhotoController {
 
     private final PhotoService photoService;
-    private final PhotoUploadService photoUploadService;
+    private final S3Client s3Client;
 
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotos(
@@ -49,6 +51,14 @@ public class PhotoController {
     @GetMapping("/markers")
     public ResponseEntity<MapMarkersResponse> getMarkersInViewport(@Valid MapMarkersRequest request) {
         return ResponseEntity.ok(photoService.getMarkersInViewport(request));
+    }
+
+    @PostMapping("/presigned-urls")
+    public ResponseEntity<List<PresignedUrlResponse>> getPresignedUrls(
+            @Valid @RequestBody List<PresignedUrlRequest> requests
+    ) {
+        List<PresignedUrlResponse> responses = s3Client.generatePresignedUrls(requests);
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

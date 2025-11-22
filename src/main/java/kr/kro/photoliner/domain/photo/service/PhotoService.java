@@ -3,13 +3,13 @@ package kr.kro.photoliner.domain.photo.service;
 import java.util.List;
 import kr.kro.photoliner.domain.album.model.view.AlbumPhotoViews;
 import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
-import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
+import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.infra.FileStorage;
+import kr.kro.photoliner.domain.photo.infra.S3Client;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.global.code.ApiResponseCode;
@@ -29,7 +29,7 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
-    private final FileStorage fileStorage;
+    private final S3Client s3Client;
 
     @Transactional(readOnly = true)
     public PhotosResponse getPhotosByIds(Long userId, Pageable pageable) {
@@ -69,8 +69,8 @@ public class PhotoService {
     @Transactional
     public void deletePhotos(DeletePhotosRequest request) {
         List<Photo> photos = photoRepository.findAllById(request.ids());
-        photos.forEach(photo -> fileStorage.deleteOriginalImage(photo.getFilePath()));
-        photos.forEach(photo -> fileStorage.deleteThumbnailImage(photo.getFilePath()));
+        photos.forEach(photo -> s3Client.delete(photo.getFilePath()));
+        photos.forEach(photo -> s3Client.delete(photo.getThumbnailPath()));
         photoRepository.deleteAllByIdInBatch(request.ids());
     }
 }
