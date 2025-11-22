@@ -41,7 +41,7 @@ public class PhotoController {
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotos(
             @RequestParam Long userId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = "capturedDt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return ResponseEntity.ok(photoService.getPhotosByIds(userId, pageable));
     }
