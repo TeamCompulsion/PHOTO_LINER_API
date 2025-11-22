@@ -1,10 +1,8 @@
 package kr.kro.photoliner.domain.photo.service;
 
 import java.util.List;
-import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.photo.dto.request.CreatePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
-import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoMarkersRequest;
@@ -30,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PhotoService {
 
     private final PhotoRepository photoRepository;
-    private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
     private final S3CustomClient s3CustomClient;
 
