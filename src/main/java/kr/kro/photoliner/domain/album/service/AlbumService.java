@@ -11,6 +11,7 @@ import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoItemsResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumsResponse;
 import kr.kro.photoliner.domain.album.model.Album;
 import kr.kro.photoliner.domain.album.model.PhotoItem;
+import kr.kro.photoliner.domain.album.model.PhotoItems;
 import kr.kro.photoliner.domain.album.model.view.AlbumPhotoView;
 import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.album.repository.AlbumRepository;
@@ -72,19 +73,15 @@ public class AlbumService {
     public void createAlbumItems(Long albumId, AlbumItemCreateRequest request) {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_ALBUM, "album id: " + albumId));
-        List<PhotoItem> photoItems = request.ids().stream()
-                .map(id -> PhotoItem.builder().photoId(id).build())
-                .toList();
-        album.addItems(photoItems);
+        List<PhotoItem> photoItems = PhotoItems.of(request.ids());
+        album.addPhotoItems(photoItems);
     }
 
     @Transactional
     public void deleteAlbumItems(Long albumId, AlbumItemDeleteRequest request) {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_ALBUM, "album id: " + albumId));
-        List<PhotoItem> photoItems = request.ids().stream()
-                .map(id -> PhotoItem.builder().photoId(id).build())
-                .toList();
-        album.removeItems(photoItems);
+        List<PhotoItem> photoItems = PhotoItems.of(request.ids());
+        album.removePhotoItems(photoItems);
     }
 }

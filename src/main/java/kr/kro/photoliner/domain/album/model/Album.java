@@ -42,19 +42,20 @@ public class Album extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "album_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "album")
     private List<PhotoItem> items = new ArrayList<>();
 
-    public void addItems(List<PhotoItem> items) {
+    public void addPhotoItems(List<PhotoItem> items) {
         this.items.addAll(items);
+        items.forEach(item -> item.setAlbum(this));
     }
 
     public void updateTitle(String title) {
         this.title = title;
     }
 
-    public void removeItems(List<PhotoItem> items) {
+    public void removePhotoItems(List<PhotoItem> items) {
         this.items.removeAll(items);
+        items.forEach(item -> item.setAlbum(null));
     }
 }
