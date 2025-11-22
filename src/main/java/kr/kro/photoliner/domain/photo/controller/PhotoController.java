@@ -47,8 +47,8 @@ public class PhotoController {
     }
 
     @GetMapping("/markers")
-    public ResponseEntity<MapMarkersResponse> getMarkersInViewport(@Valid MapMarkersRequest request) {
-        return ResponseEntity.ok(photoService.getMarkersInViewport(request));
+    public ResponseEntity<PhotoMarkersResponse> getPhotoMarkers(@Valid PhotoMarkersRequest request) {
+        return ResponseEntity.ok(photoService.getPhotoMarkers(request));
     }
 
     @PostMapping("/presigned-urls")
