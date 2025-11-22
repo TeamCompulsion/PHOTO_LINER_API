@@ -31,7 +31,16 @@ public class PhotoItem {
     @JoinColumn(name = "photo_id", nullable = false)
     private Long photoId;
 
-    public void changeAlbum(Album album) {
+    public PhotoItem(Album album, Long photoId) {
         this.album = album;
+        this.photoId = photoId;
+    }
+
+    public static PhotoItem of(Album album, Long photoId) {
+        return new PhotoItem(album, photoId);
+    }
+
+    public void removeAlbum() {
+        this.album = null;
     }
 }

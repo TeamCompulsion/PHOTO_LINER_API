@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.AccessLevel;
@@ -45,17 +46,29 @@ public class Album extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "album")
     private List<PhotoItem> items = new ArrayList<>();
 
-    public void addPhotoItems(List<PhotoItem> items) {
-        this.items.addAll(items);
-        items.forEach(item -> item.changeAlbum(this));
+    public void addPhotos(List<Long> photoIds) {
+        photoIds.forEach(this::addPhoto);
+    }
+
+    private void addPhoto(Long photoId) {
+        items.add(PhotoItem.of(this, photoId));
     }
 
     public void updateTitle(String title) {
         this.title = title;
     }
 
-    public void removePhotoItems(List<PhotoItem> items) {
-        this.items.removeAll(items);
-        items.forEach(item -> item.changeAlbum(null));
+    public void removePhotos(List<Long> photoIds) {
+        photoIds.forEach(this::removePhoto);
+    }
+
+    private void removePhoto(Long photoId) {
+        items.removeIf(item -> {
+            if (Objects.equals(item.getPhotoId(), photoId)) {
+                item.removeAlbum();
+                return true;
+            }
+            return false;
+        });
     }
 }
