@@ -2,9 +2,10 @@ package kr.kro.photoliner.domain.photo.dto.response;
 
 public record PresignedUrlResponse(
         String presignedUrl,
-        String uploadFileUrl
+        String uploadFileName
 ) {
-    public static PresignedUrlResponse of(String presignedUrl, String uploadFileUrl) {
-        return new PresignedUrlResponse(presignedUrl, uploadFileUrl);
+
+    public static PresignedUrlResponse of(String presignedUrl, String uploadFileName) {
+        return new PresignedUrlResponse(presignedUrl, uploadFileName);
     }
 }

@@ -24,9 +24,6 @@ public class S3Client {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    @Value("${cloud.aws.cdn.base-url}")
-    private String cdnBaseUrl;
-
     private static final Duration PRESIGNED_URL_EXPIRATION = Duration.ofMinutes(10);
 
     public List<PresignedUrlResponse> generatePresignedUrls(List<PresignedUrlRequest> requests) {
@@ -50,17 +47,15 @@ public class S3Client {
                 .build();
 
         PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
-
         String presignedUrl = presignedRequest.url().toString();
-        String uploadFileUrl = cdnBaseUrl + "/" + objectKey;
 
-        return PresignedUrlResponse.of(presignedUrl, uploadFileUrl);
+        return PresignedUrlResponse.of(presignedUrl, objectKey);
     }
 
     private String generateObjectKey(String originalFileName) {
         String extension = extractExtension(originalFileName);
         String uuid = UUID.randomUUID().toString();
-        return "images/original/" + uuid + extension;
+        return uuid + extension;
     }
 
     private String extractExtension(String fileName) {

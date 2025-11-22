@@ -2,13 +2,13 @@ package kr.kro.photoliner.domain.photo.controller;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import kr.kro.photoliner.domain.photo.dto.request.CreatePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PresignedUrlRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
-import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PresignedUrlResponse;
 import kr.kro.photoliner.domain.photo.infra.S3Client;
@@ -28,9 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,12 +60,11 @@ public class PhotoController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PhotoUploadResponse> uploadPhotos(
-            @RequestParam("userId") Long userId,
-            @RequestPart("files") List<MultipartFile> files
+    public ResponseEntity<Void> createPhotos(
+            @Valid @RequestBody CreatePhotosRequest request
     ) {
-        PhotoUploadResponse response = photoUploadService.uploadPhotos(userId, files);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        photoService.createPhotos(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{photoId}/captured-date")

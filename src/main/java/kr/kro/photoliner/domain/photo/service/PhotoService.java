@@ -3,6 +3,7 @@ package kr.kro.photoliner.domain.photo.service;
 import java.util.List;
 import kr.kro.photoliner.domain.album.model.view.AlbumPhotoViews;
 import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
+import kr.kro.photoliner.domain.photo.dto.request.CreatePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
@@ -31,6 +32,9 @@ public class PhotoService {
     private final GeometryFactory geometryFactory;
     private final S3Client s3Client;
 
+    private static final String ORIGINAL_BASE_PATH = "/images/original/";
+    private static final String THUMBNAIL_BASE_PATH = "/images/thumb/";
+
     @Transactional(readOnly = true)
     public PhotosResponse getPhotosByIds(Long userId, Pageable pageable) {
         return PhotosResponse.from(photoRepository.findByUserId(userId, pageable));
@@ -47,6 +51,21 @@ public class PhotoService {
                 albumPhotoViews.filterIncludedInAlbum(request.albumId()),
                 albumPhotoViews.filterExcludedFromAlbum(request.albumId())
         );
+    }
+
+    @Transactional
+    public void createPhotos(CreatePhotosRequest request) {
+        List<Photo> photos = request.photos().stream()
+                .map(photo -> Photo.builder()
+                        .userId(request.userId())
+                        .fileName(photo.fileName())
+                        .filePath(ORIGINAL_BASE_PATH + photo.uploadFileName())
+                        .thumbnailPath(THUMBNAIL_BASE_PATH + photo.uploadFileName())
+                        .capturedDt(photo.capturedDate())
+                        .location(geometryFactory.createPoint(photo.convertToGeo()))
+                        .build()
+                ).toList();
+        photoRepository.saveAll(photos);
     }
 
     @Transactional
