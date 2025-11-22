@@ -10,10 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.AccessLevel;
@@ -56,13 +54,6 @@ public class Photo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
-    public boolean isBetween(LocalDate start, LocalDate end) {
-        return Optional.ofNullable(capturedDt)
-                .map(LocalDateTime::toLocalDate)
-                .filter(localDate -> localDate.isAfter(start) && localDate.isBefore(end))
-                .isPresent();
-    }
 
     public void updateCapturedDate(LocalDateTime capturedDt) {
         this.capturedDt = capturedDt;

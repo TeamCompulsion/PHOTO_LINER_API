@@ -40,6 +40,7 @@ public enum ApiResponseCode {
      */
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."),
     NOT_FOUND_PHOTO(HttpStatus.NOT_FOUND, "사진이 존재하지 않습니다."),
+    NOT_FOUND_ALBUM(HttpStatus.NOT_FOUND, "앨범이 존재하지 않습니다."),
 
     /**
      * 409 CONFLICT (중복 혹은 충돌)
@@ -62,8 +63,7 @@ public enum ApiResponseCode {
     FILE_STORE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장 중 오류가 발생했습니다."),
     FILE_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 생성 중 오류가 발생했습니다."),
     DIRECTORY_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "폴더 생성 중 오류가 발생했습니다."),
-    FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다.")
-    ;
+    FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

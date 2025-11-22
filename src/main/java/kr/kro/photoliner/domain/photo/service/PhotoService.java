@@ -1,6 +1,8 @@
 package kr.kro.photoliner.domain.photo.service;
 
 import java.util.List;
+import kr.kro.photoliner.domain.album.model.view.AlbumPhotoViews;
+import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.photo.dto.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.MapMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
@@ -8,10 +10,7 @@ import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.response.MapMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.infra.FileStorage;
-import kr.kro.photoliner.domain.photo.model.AlbumPhotos;
 import kr.kro.photoliner.domain.photo.model.Photo;
-import kr.kro.photoliner.domain.photo.model.Photos;
-import kr.kro.photoliner.domain.photo.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
 import kr.kro.photoliner.global.code.ApiResponseCode;
 import kr.kro.photoliner.global.exception.CustomException;
@@ -27,19 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PhotoService {
 
-    private final AlbumPhotoRepository albumPhotoRepository;
     private final PhotoRepository photoRepository;
+    private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
     private final FileStorage fileStorage;
 
     @Transactional(readOnly = true)
-    public PhotosResponse getPhotos(Long userId, Pageable pageable) {
+    public PhotosResponse getPhotosByIds(Long userId, Pageable pageable) {
         return PhotosResponse.from(photoRepository.findByUserId(userId, pageable));
-    }
-
-    @Transactional(readOnly = true)
-    public PhotosResponse getPhotosByAlbumId(Long userId, Long albumId, Pageable pageable) {
-        return PhotosResponse.from(photoRepository.findByUserIdAndAlbumId(userId, albumId, pageable));
     }
 
     @Transactional(readOnly = true)
@@ -47,12 +41,11 @@ public class PhotoService {
         Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
-        Photos photos = photoRepository.getPhotosByUserIdInBox(request.userId(), sw, ne);
-        AlbumPhotos albumPhotos = albumPhotoRepository.getByPhotoIdIn(photos.getPhotoIds());
+        AlbumPhotoViews albumPhotoViews = albumPhotoRepository.getByUserIdInBox(request.userId(), sw, ne);
 
         return MapMarkersResponse.of(
-                albumPhotos.getPhotoIncludedAlbum(request.albumId()),
-                albumPhotos.getPhotoNotIncludedAlbum(request.albumId())
+                albumPhotoViews.filterIncludedInAlbum(request.albumId()),
+                albumPhotoViews.filterExcludedFromAlbum(request.albumId())
         );
     }
 

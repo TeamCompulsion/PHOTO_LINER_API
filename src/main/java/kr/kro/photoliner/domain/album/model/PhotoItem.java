@@ -1,17 +1,15 @@
-package kr.kro.photoliner.domain.photo.model;
+package kr.kro.photoliner.domain.album.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.Objects;
-import kr.kro.photoliner.domain.album.model.Album;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,20 +18,29 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "albums_photos")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AlbumPhoto {
+@Builder
+public class PhotoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "photo_id", nullable = false)
-    private Photo photo;
+    private Long photoId;
 
-    public boolean isIncludedInAlbum(Long albumId) {
-        return Objects.equals(album.getId(), albumId);
+    public PhotoItem(Album album, Long photoId) {
+        this.album = album;
+        this.photoId = photoId;
+    }
+
+    public static PhotoItem of(Album album, Long photoId) {
+        return new PhotoItem(album, photoId);
+    }
+
+    public void removeAlbum() {
+        this.album = null;
     }
 }

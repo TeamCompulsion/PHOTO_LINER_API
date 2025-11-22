@@ -26,7 +26,7 @@ public record AlbumsResponse(
         public static InnerAlbum from(Album album) {
             return new InnerAlbum(
                     album.getId(),
-                    album.getName()
+                    album.getTitle()
             );
         }
     }

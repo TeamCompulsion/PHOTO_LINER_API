@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.locationtech.jts:jts-core:1.19.0'
 
     // Swagger-ui
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3'
 
     // EXIF metadata extraction
     implementation 'com.drewnoakes:metadata-extractor:2.19.0'

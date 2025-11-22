@@ -94,7 +94,7 @@ public class FileStorage {
 
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || originalFilename.contains("..")) {
-            throw CustomException.of(ApiResponseCode.INVALID_FILE_NAME, "file name: " + originalFilename);
+            throw CustomException.of(ApiResponseCode.INVALID_FILE_NAME, "file title: " + originalFilename);
         }
     }
 
@@ -110,7 +110,7 @@ public class FileStorage {
                 Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
-            throw CustomException.of(ApiResponseCode.FILE_STORE_ERROR, "file name: " + file.getOriginalFilename(), e);
+            throw CustomException.of(ApiResponseCode.FILE_STORE_ERROR, "file title: " + file.getOriginalFilename(), e);
         }
     }
 

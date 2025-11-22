@@ -10,9 +10,4 @@ public record Photos(
         return photos.size();
     }
 
-    public List<Long> getPhotoIds() {
-        return photos.stream()
-                .map(Photo::getId)
-                .toList();
-    }
 }

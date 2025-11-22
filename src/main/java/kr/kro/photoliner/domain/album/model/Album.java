@@ -1,5 +1,6 @@
 package kr.kro.photoliner.domain.album.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,8 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import kr.kro.photoliner.common.model.BaseEntity;
 import kr.kro.photoliner.domain.user.model.User;
 import lombok.AccessLevel;
@@ -31,10 +36,39 @@ public class Album extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "album")
+    private List<PhotoItem> items = new ArrayList<>();
+
+    public void addPhotos(List<Long> photoIds) {
+        photoIds.forEach(this::addPhoto);
+    }
+
+    private void addPhoto(Long photoId) {
+        items.add(PhotoItem.of(this, photoId));
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void removePhotos(List<Long> photoIds) {
+        photoIds.forEach(this::removePhoto);
+    }
+
+    private void removePhoto(Long photoId) {
+        items.removeIf(item -> {
+            if (Objects.equals(item.getPhotoId(), photoId)) {
+                item.removeAlbum();
+                return true;
+            }
+            return false;
+        });
+    }
 }

@@ -43,16 +43,7 @@ public class PhotoController {
             @RequestParam Long userId,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return ResponseEntity.ok(photoService.getPhotos(userId, pageable));
-    }
-
-    @GetMapping("/albums/{albumId}")
-    public ResponseEntity<PhotosResponse> getPhotosByAlbumId(
-            @PathVariable Long albumId,
-            @RequestParam Long userId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
-        return ResponseEntity.ok(photoService.getPhotosByAlbumId(userId, albumId, pageable));
+        return ResponseEntity.ok(photoService.getPhotosByIds(userId, pageable));
     }
 
     @GetMapping("/markers")

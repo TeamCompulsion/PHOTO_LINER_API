@@ -10,4 +10,5 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     Album save(Album album);
 
     Page<Album> findByUserId(Long userId, Pageable pageable);
+
 }
