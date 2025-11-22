@@ -47,7 +47,7 @@ public class Album extends BaseEntity {
 
     public void addPhotoItems(List<PhotoItem> items) {
         this.items.addAll(items);
-        items.forEach(item -> item.setAlbum(this));
+        items.forEach(item -> item.changeAlbum(this));
     }
 
     public void updateTitle(String title) {
@@ -56,6 +56,6 @@ public class Album extends BaseEntity {
 
     public void removePhotoItems(List<PhotoItem> items) {
         this.items.removeAll(items);
-        items.forEach(item -> item.setAlbum(null));
+        items.forEach(item -> item.changeAlbum(null));
     }
 }

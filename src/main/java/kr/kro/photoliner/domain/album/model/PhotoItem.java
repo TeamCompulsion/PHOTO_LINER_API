@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -25,11 +24,14 @@ public class PhotoItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;
 
     @JoinColumn(name = "photo_id", nullable = false)
     private Long photoId;
+
+    public void changeAlbum(Album album) {
+        this.album = album;
+    }
 }
