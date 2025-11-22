@@ -25,5 +25,4 @@ public class PhotoItem {
 
     @Column(name = "photo_id", nullable = false)
     private Long photoId;
-
 }

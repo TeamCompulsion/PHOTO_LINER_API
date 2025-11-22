@@ -42,7 +42,7 @@ public class AlbumPhotoView {
 
     @Column(name = "user_id")
     private Long userId;
-    
+
     public Double getLatitude() {
         if (Objects.isNull(location)) {
             return null;
@@ -56,5 +56,4 @@ public class AlbumPhotoView {
         }
         return location.getY();
     }
-
 }
