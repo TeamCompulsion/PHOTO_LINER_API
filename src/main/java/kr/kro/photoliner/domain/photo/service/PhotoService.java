@@ -54,10 +54,10 @@ public class PhotoService {
     }
 
     @Transactional
-    public void createPhotos(CreatePhotosRequest request) {
+    public void createPhotos(Long userId, CreatePhotosRequest request) {
         List<Photo> photos = request.photos().stream()
                 .map(photo -> Photo.builder()
-                        .userId(request.userId())
+                        .userId(userId)
                         .fileName(photo.fileName())
                         .filePath(cdnURL + ORIGINAL_BASE_PATH + photo.uploadFileName())
                         .thumbnailPath(cdnURL + THUMBNAIL_BASE_PATH + photo.uploadFileName())

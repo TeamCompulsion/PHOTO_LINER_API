@@ -69,7 +69,8 @@ public class PhotoController {
             @Valid @RequestBody CreatePhotosRequest request,
             @Auth Long userId
     ) {
-        photoService.createPhotos(request);
+        System.out.println("create Photos: " + userId);
+        photoService.createPhotos(userId, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

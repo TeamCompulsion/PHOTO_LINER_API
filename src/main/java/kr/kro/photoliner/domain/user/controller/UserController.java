@@ -2,7 +2,9 @@ package kr.kro.photoliner.domain.user.controller;
 
 import java.net.URI;
 import kr.kro.photoliner.common.dto.response.JwtResponse;
+import kr.kro.photoliner.domain.user.dto.response.UserInfoResponse;
 import kr.kro.photoliner.domain.user.service.UserService;
+import kr.kro.photoliner.global.auth.Auth;
 import kr.kro.photoliner.global.kakao.login.service.KakaoAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,5 +41,12 @@ public class UserController {
                 .status(HttpStatus.FOUND)
                 .location(URI.create(kakaoAuthService.getAuthorizationRedirectUrl()))
                 .build();
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<UserInfoResponse> getUserInfo(
+            @Auth Long userId
+    ) {
+        return ResponseEntity.ok(userService.getUserInfo(userId));
     }
 }
