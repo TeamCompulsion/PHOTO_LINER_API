@@ -22,6 +22,11 @@ cloud:
 
 kakao:
   api:
-    rest-api-key:
+    rest-api-key: rest api key
     login-oauth:
       redirect-url: http://localhost:8080/api/v1/login/kakao
+
+jwt:
+  secret-key: secret key
+  access-token:
+    expiration-time: time
