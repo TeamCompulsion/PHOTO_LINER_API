@@ -35,7 +35,6 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         Objects.requireNonNull(authAt);
 
         String token = jwtProvider.extractAccessToken(webRequest);
-        System.out.println("resolver: " + token);
         jwtProvider.validateToken(token);
         Long userId = jwtProvider.getUserId(token);
 
