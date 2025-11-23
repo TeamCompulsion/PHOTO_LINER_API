@@ -2,27 +2,53 @@ package kr.kro.photoliner.domain.photo.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import kr.kro.photoliner.domain.photo.model.Photo;
-import kr.kro.photoliner.domain.photo.model.Photos;
+import org.locationtech.jts.geom.Point;
+import org.springframework.data.domain.Page;
 
 public record PhotosResponse(
-        Integer count,
-        List<InnerPhotoResponse> photos
+        List<InnerPhotoResponse> photos,
+        InnerPageInfo pageInfo
 ) {
 
-    public static PhotosResponse from(Photos photos) {
+    public static PhotosResponse from(Page<Photo> photoPage) {
         return new PhotosResponse(
-                photos.count(),
-                photos.photos().stream()
+                photoPage.getContent().stream()
                         .map(InnerPhotoResponse::from)
-                        .toList()
+                        .toList(),
+                InnerPageInfo.from(photoPage)
         );
+    }
+
+    public record InnerPageInfo(
+            long totalElements,
+            int totalPages,
+            int currentPage,
+            int size,
+            boolean hasNext,
+            boolean hasPrevious
+    ) {
+
+        public static InnerPageInfo from(Page<Photo> page) {
+            return new InnerPageInfo(
+                    page.getTotalElements(),
+                    page.getTotalPages(),
+                    page.getNumber(),
+                    page.getSize(),
+                    page.hasNext(),
+                    page.hasPrevious()
+            );
+        }
     }
 
     public record InnerPhotoResponse(
             Long id,
             String filePath,
+            String thumbnailPath,
             LocalDateTime capturedDt,
+            Double lat,
+            Double lng,
             Long userId
     ) {
 
@@ -30,7 +56,10 @@ public record PhotosResponse(
             return new InnerPhotoResponse(
                     photo.getId(),
                     photo.getFilePath(),
+                    photo.getThumbnailPath(),
                     photo.getCapturedDt(),
+                    photo.getLongitude(),
+                    photo.getLatitude(),
                     photo.getUser().getId());
         }
     }

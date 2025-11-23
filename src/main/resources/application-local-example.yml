@@ -1,0 +1,13 @@
+spring:
+
+  datasource:
+    url: url
+    username: username
+    password: password
+
+photo:
+  upload:
+    base-dir: url
+
+cors:
+  allow-url: url

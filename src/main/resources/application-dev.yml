@@ -1,0 +1,22 @@
+spring:
+  config:
+    import:
+      - "aws-parameterstore:/PHOTO_LINER_API/rds/dev/"
+      - "aws-parameterstore:/PHOTO_LINER_API/ec2/dev/"
+
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USER_NAME}
+    password: ${MYSQL_PASSWORD}
+
+photo:
+  upload:
+    base-dir: ${PHOTOS_UPLOAD_URL}
+
+cors:
+  allow-url: ${CORS_ALLOW_URL}

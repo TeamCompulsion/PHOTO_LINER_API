@@ -1,0 +1,3 @@
+ALTER TABLE photos
+    MODIFY COLUMN captured_dt DATETIME,
+    MODIFY COLUMN location POINT
