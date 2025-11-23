@@ -19,11 +19,19 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoAuthService kakaoAuthService;
+    private static final String LOGIN_REDIRECT_URL = "http://localhost:5173/login/kakao";
 
     @GetMapping("/login/kakao")
     public ResponseEntity<JwtResponse> login(@RequestParam(value = "code") String authorizationCode) {
+        JwtResponse jwtResponse = userService.oAuthLogin(authorizationCode);
+
+        String redirectUrl = LOGIN_REDIRECT_URL + "#accessToken=" + jwtResponse.accessToken() + "&refreshToken="
+                + jwtResponse.refreshToken();
+
         return ResponseEntity
-                .ok(userService.oAuthLogin(authorizationCode));
+                .status(HttpStatus.FOUND)
+                .location(URI.create(redirectUrl))
+                .build();
     }
 
     @GetMapping("/login/kakao/authorization")
