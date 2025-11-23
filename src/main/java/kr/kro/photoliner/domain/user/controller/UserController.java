@@ -1,7 +1,6 @@
 package kr.kro.photoliner.domain.user.controller;
 
 import java.net.URI;
-import kr.kro.photoliner.common.dto.response.JwtResponse;
 import kr.kro.photoliner.domain.user.dto.response.UserInfoResponse;
 import kr.kro.photoliner.domain.user.service.UserService;
 import kr.kro.photoliner.global.auth.Auth;
@@ -21,13 +20,10 @@ public class UserController {
 
     private final UserService userService;
     private final KakaoAuthService kakaoAuthService;
-    private static final String LOGIN_REDIRECT_URL = "http://localhost:5173/login/kakao";
 
     @GetMapping("/login/kakao")
-    public ResponseEntity<JwtResponse> login(@RequestParam(value = "code") String authorizationCode) {
-        JwtResponse jwtResponse = userService.oAuthLogin(authorizationCode);
-
-        String redirectUrl = LOGIN_REDIRECT_URL + "#accessToken=" + jwtResponse.accessToken();
+    public ResponseEntity<Void> login(@RequestParam(value = "code") String authorizationCode) {
+        String redirectUrl = userService.oAuthLogin(authorizationCode);
 
         return ResponseEntity
                 .status(HttpStatus.FOUND)
