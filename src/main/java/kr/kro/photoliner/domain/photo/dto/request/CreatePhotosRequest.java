@@ -1,6 +1,8 @@
 package kr.kro.photoliner.domain.photo.dto.request;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -28,9 +30,13 @@ public record CreatePhotosRequest(
             LocalDateTime capturedDate,
 
             @Nullable
+            @Min(0)
+            @Max(90)
             Integer latitude,
 
             @Nullable
+            @Min(0)
+            @Max(180)
             Integer longitude
     ) {
 
@@ -38,7 +44,7 @@ public record CreatePhotosRequest(
             if (Objects.isNull(latitude) || Objects.isNull(longitude)) {
                 return null;
             }
-            return new Coordinate(latitude, longitude);
+            return new Coordinate(longitude, latitude);
         }
     }
 }
