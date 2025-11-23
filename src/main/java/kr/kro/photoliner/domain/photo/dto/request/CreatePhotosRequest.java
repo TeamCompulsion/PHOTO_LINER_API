@@ -32,12 +32,12 @@ public record CreatePhotosRequest(
             @Nullable
             @Min(0)
             @Max(90)
-            Integer latitude,
+            Double latitude,
 
             @Nullable
             @Min(0)
             @Max(180)
-            Integer longitude
+            Double longitude
     ) {
 
         public Coordinate convertToGeo() {
