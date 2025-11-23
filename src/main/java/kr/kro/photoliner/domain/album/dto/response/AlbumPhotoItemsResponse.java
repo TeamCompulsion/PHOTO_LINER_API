@@ -3,15 +3,14 @@ package kr.kro.photoliner.domain.album.dto.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import kr.kro.photoliner.domain.album.dto.AlbumPhotoItem;
-import org.springframework.data.domain.Page;
 
 public record AlbumPhotoItemsResponse(
         List<InnerAlbumPhotoItem> items
 ) {
 
-    public static AlbumPhotoItemsResponse from(Page<AlbumPhotoItem> albumPhotoViews) {
+    public static AlbumPhotoItemsResponse from(List<AlbumPhotoItem> albumPhotoItems) {
         return new AlbumPhotoItemsResponse(
-                albumPhotoViews.stream()
+                albumPhotoItems.stream()
                         .map(InnerAlbumPhotoItem::from)
                         .toList()
         );
@@ -23,7 +22,9 @@ public record AlbumPhotoItemsResponse(
             String fileName,
             String filePath,
             String thumbnailPath,
-            LocalDateTime capturedDt
+            LocalDateTime capturedDt,
+            Double latitude,
+            Double longitude
     ) {
 
         public static InnerAlbumPhotoItem from(AlbumPhotoItem albumPhotoItem) {
@@ -33,7 +34,9 @@ public record AlbumPhotoItemsResponse(
                     albumPhotoItem.fileName(),
                     albumPhotoItem.filePath(),
                     albumPhotoItem.thumbnailPath(),
-                    albumPhotoItem.capturedDt()
+                    albumPhotoItem.capturedDt(),
+                    albumPhotoItem.getLatitude(),
+                    albumPhotoItem.getLongitude()
             );
         }
     }
