@@ -44,20 +44,20 @@ public class PhotoService {
     }
 
     @Transactional(readOnly = true)
-    public PhotoMarkersResponse getPhotoMarkers(PhotoMarkersRequest request) {
+    public PhotoMarkersResponse getPhotoMarkers(Long userId, PhotoMarkersRequest request) {
         Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
-        Photos photos = photoRepository.getByUserIdInBox(request.userId(), sw, ne);
+        Photos photos = photoRepository.getByUserIdInBox(userId, sw, ne);
 
         return PhotoMarkersResponse.from(photos);
     }
 
     @Transactional
-    public void createPhotos(CreatePhotosRequest request) {
+    public void createPhotos(Long userId, CreatePhotosRequest request) {
         List<Photo> photos = request.photos().stream()
                 .map(photo -> Photo.builder()
-                        .userId(request.userId())
+                        .userId(userId)
                         .fileName(photo.fileName())
                         .filePath(cdnURL + ORIGINAL_BASE_PATH + photo.uploadFileName())
                         .thumbnailPath(cdnURL + THUMBNAIL_BASE_PATH + photo.uploadFileName())

@@ -31,3 +31,14 @@ cloud:
       bucket: ${BUCKET_NAME}
     cdn:
       base-url: ${CDN_URL}
+
+kakao:
+  api:
+    rest-api-key: ${REST_API_KEY}
+    login-oauth:
+      redirect-url: ${REDIRECT_URL}
+
+jwt:
+  secret-key: ${SECRET_KEY}
+  access-token:
+    expiration-time: ${EXPIRATION_TIME}

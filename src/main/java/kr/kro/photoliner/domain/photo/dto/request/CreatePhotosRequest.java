@@ -11,10 +11,6 @@ import java.util.Objects;
 import org.locationtech.jts.geom.Coordinate;
 
 public record CreatePhotosRequest(
-        @NotNull
-        Long userId,
-
-        @NotNull
         @NotEmpty
         List<InnerPhoto> photos
 ) {

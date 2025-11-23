@@ -13,6 +13,7 @@ import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PresignedUrlResponse;
 import kr.kro.photoliner.domain.photo.infra.S3CustomClient;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
+import kr.kro.photoliner.global.auth.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,7 +40,7 @@ public class PhotoController {
 
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotos(
-            @RequestParam Long userId,
+            @Auth Long userId,
             @RequestParam(required = false) Boolean hasLocation,
             @RequestParam(required = false) Boolean hasCapturedDate,
             @PageableDefault(sort = "capturedDt", direction = Sort.Direction.DESC) Pageable pageable
@@ -48,8 +49,11 @@ public class PhotoController {
     }
 
     @GetMapping("/markers")
-    public ResponseEntity<PhotoMarkersResponse> getPhotoMarkers(@Valid PhotoMarkersRequest request) {
-        return ResponseEntity.ok(photoService.getPhotoMarkers(request));
+    public ResponseEntity<PhotoMarkersResponse> getPhotoMarkers(
+            @Valid PhotoMarkersRequest request,
+            @Auth Long userId
+    ) {
+        return ResponseEntity.ok(photoService.getPhotoMarkers(userId, request));
     }
 
     @PostMapping("/presigned-urls")
@@ -62,14 +66,16 @@ public class PhotoController {
 
     @PostMapping
     public ResponseEntity<Void> createPhotos(
-            @Valid @RequestBody CreatePhotosRequest request
+            @Valid @RequestBody CreatePhotosRequest request,
+            @Auth Long userId
     ) {
-        photoService.createPhotos(request);
+        photoService.createPhotos(userId, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{photoId}/captured-date")
     public ResponseEntity<Void> updatePhotoCapturedDate(
+            @Auth Long userId,
             @PathVariable Long photoId,
             @Valid @RequestBody PhotoCapturedDateUpdateRequest request
     ) {
@@ -80,7 +86,8 @@ public class PhotoController {
     @PatchMapping("/{photoId}/location")
     public ResponseEntity<Void> updatePhotoLocation(
             @PathVariable Long photoId,
-            @Valid @RequestBody PhotoLocationUpdateRequest request
+            @Valid @RequestBody PhotoLocationUpdateRequest request,
+            @Auth Long userId
     ) {
         photoService.updatePhotoLocation(photoId, request);
         return ResponseEntity.noContent().build();
@@ -88,7 +95,8 @@ public class PhotoController {
 
     @DeleteMapping
     public ResponseEntity<Void> deletePhoto(
-            @Valid @RequestBody DeletePhotosRequest request
+            @Valid @RequestBody DeletePhotosRequest request,
+            @Auth Long userId
     ) {
         photoService.deletePhotos(request);
         return ResponseEntity.noContent().build();
