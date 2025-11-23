@@ -30,3 +30,6 @@ jwt:
   secret-key: secret key
   access-token:
     expiration-time: time
+
+application:
+  base-url: base url

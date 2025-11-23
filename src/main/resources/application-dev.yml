@@ -42,3 +42,6 @@ jwt:
   secret-key: ${SECRET_KEY}
   access-token:
     expiration-time: ${EXPIRATION_TIME}
+
+application:
+  base-url: ${BASE_URL}
