@@ -29,6 +29,8 @@ public enum ApiResponseCode {
      * 401 Unauthorized (인증 필요)
      */
     WITHDRAWN_USER(HttpStatus.UNAUTHORIZED, "탈퇴한 계정입니다."),
+    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
+    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰 형식입니다."),
 
     /**
      * 403 Forbidden (인가 필요)
@@ -63,7 +65,8 @@ public enum ApiResponseCode {
     FILE_STORE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장 중 오류가 발생했습니다."),
     FILE_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 생성 중 오류가 발생했습니다."),
     DIRECTORY_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "폴더 생성 중 오류가 발생했습니다."),
-    FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다.");
+    FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다."),
+    TOKEN_PARSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "토큰 파싱 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

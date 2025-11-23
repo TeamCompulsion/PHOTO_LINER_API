@@ -25,8 +25,7 @@ public class UserController {
     public ResponseEntity<JwtResponse> login(@RequestParam(value = "code") String authorizationCode) {
         JwtResponse jwtResponse = userService.oAuthLogin(authorizationCode);
 
-        String redirectUrl = LOGIN_REDIRECT_URL + "#accessToken=" + jwtResponse.accessToken() + "&refreshToken="
-                + jwtResponse.refreshToken();
+        String redirectUrl = LOGIN_REDIRECT_URL + "#accessToken=" + jwtResponse.accessToken();
 
         return ResponseEntity
                 .status(HttpStatus.FOUND)
