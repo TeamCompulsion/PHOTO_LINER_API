@@ -12,8 +12,17 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
-    Page<Photo> findByUserId(
+    @Query("""
+                select p
+                from Photo p
+                where p.userId = :userId
+                    and (:hasLocation is null or (:hasLocation = true and p.location is not null) or (:hasLocation = false and p.location is null))
+                    and (:hasCapturedDate is null or (:hasCapturedDate = true and p.capturedDt is not null) or (:hasCapturedDate = false and p.capturedDt is null))
+            """)
+    Page<Photo> findByUserIdWithFilters(
             Long userId,
+            Boolean hasLocation,
+            Boolean hasCapturedDate,
             Pageable pageable
     );
 
@@ -21,7 +30,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
                 select p
                 from Photo p
                 left outer join PhotoItem pi on p.id = pi.photoId
-                where p.user.id = :userId
+                where p.userId = :userId
                     and function('st_x', p.location) between function('st_x', :sw) and function('st_x', :ne)
                     and function('st_y', p.location) between function('st_y', :sw) and function('st_y', :ne)
                 order by p.capturedDt

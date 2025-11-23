@@ -74,10 +74,9 @@ public class AlbumController {
     @GetMapping("/{albumId}/photos")
     public ResponseEntity<AlbumPhotoItemsResponse> getAlbumItems(
             @PathVariable Long albumId,
-            @PageableDefault Pageable pageable,
             @Auth Long userId
     ) {
-        return ResponseEntity.ok(albumService.getAlbumPhotoItems(albumId, pageable));
+        return ResponseEntity.ok(albumService.getAlbumPhotoItems(albumId));
     }
 
     @PostMapping("/{albumId}/photos")

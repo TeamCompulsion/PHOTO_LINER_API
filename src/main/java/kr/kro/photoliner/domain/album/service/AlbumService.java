@@ -1,5 +1,6 @@
 package kr.kro.photoliner.domain.album.service;
 
+import java.util.List;
 import kr.kro.photoliner.domain.album.dto.AlbumPhotoItem;
 import kr.kro.photoliner.domain.album.dto.AlbumPhotoItems;
 import kr.kro.photoliner.domain.album.dto.request.AlbumCreateRequest;
@@ -55,8 +56,8 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public AlbumPhotoItemsResponse getAlbumPhotoItems(Long albumId, Pageable pageable) {
-        Page<AlbumPhotoItem> albumPhotoItems = albumPhotoRepository.findByAlbumId(albumId, pageable);
+    public AlbumPhotoItemsResponse getAlbumPhotoItems(Long albumId) {
+        List<AlbumPhotoItem> albumPhotoItems = albumPhotoRepository.findByAlbumId(albumId);
         return AlbumPhotoItemsResponse.from(albumPhotoItems);
     }
 

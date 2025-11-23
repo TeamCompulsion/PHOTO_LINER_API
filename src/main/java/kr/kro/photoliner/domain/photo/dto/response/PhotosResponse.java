@@ -2,9 +2,7 @@ package kr.kro.photoliner.domain.photo.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import kr.kro.photoliner.domain.photo.model.Photo;
-import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Page;
 
 public record PhotosResponse(
@@ -60,7 +58,7 @@ public record PhotosResponse(
                     photo.getCapturedDt(),
                     photo.getLongitude(),
                     photo.getLatitude(),
-                    photo.getUser().getId());
+                    photo.getId());
         }
     }
 }
