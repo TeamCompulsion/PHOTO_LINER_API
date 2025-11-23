@@ -26,6 +26,7 @@ public class S3CustomClient {
     private String bucketName;
 
     private static final Duration PRESIGNED_URL_EXPIRATION = Duration.ofMinutes(10);
+    private static final String BASE_URL = "images/original/";
 
     public List<PresignedUrlResponse> generatePresignedUrls(List<PresignedUrlRequest> requests) {
         return requests.stream()
@@ -38,7 +39,7 @@ public class S3CustomClient {
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(objectKey)
+                .key(BASE_URL + objectKey)
                 .contentType(request.contentType())
                 .build();
 

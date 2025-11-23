@@ -61,7 +61,7 @@ public class PhotoService {
                         .filePath(cdnURL + ORIGINAL_BASE_PATH + photo.uploadFileName())
                         .thumbnailPath(cdnURL + THUMBNAIL_BASE_PATH + photo.uploadFileName())
                         .capturedDt(photo.capturedDate())
-                        .location(geometryFactory.createPoint(photo.convertToGeo()))
+                        .location(getPointOrNull(photo.convertToGeo()))
                         .build()
                 ).toList();
         photoRepository.saveAll(photos);
@@ -90,5 +90,12 @@ public class PhotoService {
         photos.forEach(photo -> s3CustomClient.delete(photo.getFilePath()));
         photos.forEach(photo -> s3CustomClient.delete(photo.getThumbnailPath()));
         photoRepository.deleteAllByIdInBatch(request.ids());
+    }
+
+    private Point getPointOrNull(Coordinate coordinate) {
+        if (coordinate == null) {
+            return null;
+        }
+        return geometryFactory.createPoint(coordinate);
     }
 }

@@ -33,6 +33,7 @@ public record CreatePhotosRequest(
             @Nullable
             Integer longitude
     ) {
+
         public Coordinate convertToGeo() {
             if (Objects.isNull(latitude) || Objects.isNull(longitude)) {
                 return null;
