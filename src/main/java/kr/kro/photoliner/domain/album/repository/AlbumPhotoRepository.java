@@ -5,8 +5,6 @@ import kr.kro.photoliner.domain.album.dto.AlbumPhotoItem;
 import kr.kro.photoliner.domain.album.dto.AlbumPhotoItems;
 import kr.kro.photoliner.domain.album.model.PhotoItem;
 import org.locationtech.jts.geom.Point;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -25,7 +23,7 @@ public interface AlbumPhotoRepository extends JpaRepository<PhotoItem, Long> {
                 inner join Photo p on p.id = pi.photoId
                 where pi.album.id = :albumId
             """)
-    Page<AlbumPhotoItem> findByAlbumId(Long albumId, Pageable pageable);
+    List<AlbumPhotoItem> findByAlbumId(Long albumId);
 
     @Query("""
                 select new kr.kro.photoliner.domain.album.dto.AlbumPhotoItem(
