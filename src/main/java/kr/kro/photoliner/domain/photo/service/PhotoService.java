@@ -1,14 +1,14 @@
 package kr.kro.photoliner.domain.photo.service;
 
 import java.util.List;
-import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
+import kr.kro.photoliner.domain.photo.dto.request.CreatePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoMarkersRequest;
 import kr.kro.photoliner.domain.photo.dto.response.PhotoMarkersResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
-import kr.kro.photoliner.domain.photo.infra.FileStorage;
+import kr.kro.photoliner.domain.photo.infra.S3CustomClient;
 import kr.kro.photoliner.domain.photo.model.Photo;
 import kr.kro.photoliner.domain.photo.model.Photos;
 import kr.kro.photoliner.domain.photo.repository.PhotoRepository;
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class PhotoService {
 
     private final PhotoRepository photoRepository;
-    private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
-    private final FileStorage fileStorage;
+    private final S3CustomClient s3CustomClient;
+
+    @Value("${cloud.aws.cdn.base-url}")
+    private String cdnURL;
+
+    private static final String ORIGINAL_BASE_PATH = "/images/original/";
+    private static final String THUMBNAIL_BASE_PATH = "/images/thumb/";
 
     @Transactional(readOnly = true)
     public PhotosResponse getPhotosByIds(Long userId, Pageable pageable) {
@@ -44,6 +50,21 @@ public class PhotoService {
         Photos photos = photoRepository.getByUserIdInBox(request.userId(), sw, ne);
 
         return PhotoMarkersResponse.from(photos);
+    }
+
+    @Transactional
+    public void createPhotos(CreatePhotosRequest request) {
+        List<Photo> photos = request.photos().stream()
+                .map(photo -> Photo.builder()
+                        .userId(request.userId())
+                        .fileName(photo.fileName())
+                        .filePath(cdnURL + ORIGINAL_BASE_PATH + photo.uploadFileName())
+                        .thumbnailPath(cdnURL + THUMBNAIL_BASE_PATH + photo.uploadFileName())
+                        .capturedDt(photo.capturedDate())
+                        .location(getPointOrNull(photo.convertToGeo()))
+                        .build()
+                ).toList();
+        photoRepository.saveAll(photos);
     }
 
     @Transactional
@@ -66,8 +87,15 @@ public class PhotoService {
     @Transactional
     public void deletePhotos(DeletePhotosRequest request) {
         List<Photo> photos = photoRepository.findAllById(request.ids());
-        photos.forEach(photo -> fileStorage.deleteOriginalImage(photo.getFilePath()));
-        photos.forEach(photo -> fileStorage.deleteThumbnailImage(photo.getFilePath()));
+        photos.forEach(photo -> s3CustomClient.delete(photo.getFilePath()));
+        photos.forEach(photo -> s3CustomClient.delete(photo.getThumbnailPath()));
         photoRepository.deleteAllByIdInBatch(request.ids());
+    }
+
+    private Point getPointOrNull(Coordinate coordinate) {
+        if (coordinate == null) {
+            return null;
+        }
+        return geometryFactory.createPoint(coordinate);
     }
 }
