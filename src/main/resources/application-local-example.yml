@@ -31,5 +31,5 @@ jwt:
   access-token:
     expiration-time: time
 
-application:
+client:
   base-url: base url

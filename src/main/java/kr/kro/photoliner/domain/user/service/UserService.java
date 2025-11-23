@@ -20,7 +20,7 @@ public class UserService {
     private final KakaoAuthService kakaoAuthService;
     private final JwtProvider jwtProvider;
 
-    @Value("${application.base-url}")
+    @Value("${client.base-url}")
     public String baseUrl;
 
     private static final String LOGIN_REDIRECT_URL = "/login/kakao";

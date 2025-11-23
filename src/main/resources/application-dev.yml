@@ -43,5 +43,5 @@ jwt:
   access-token:
     expiration-time: ${EXPIRATION_TIME}
 
-application:
-  base-url: ${BASE_URL}
+client:
+  base-url: ${CLIENT_BASE_URL}
