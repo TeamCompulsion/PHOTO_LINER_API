@@ -38,8 +38,9 @@ public class PhotoService {
     private static final String THUMBNAIL_BASE_PATH = "/images/thumb/";
 
     @Transactional(readOnly = true)
-    public PhotosResponse getPhotosByIds(Long userId, Pageable pageable) {
-        return PhotosResponse.from(photoRepository.findByUserId(userId, pageable));
+    public PhotosResponse getPhotosByIds(Long userId, Boolean hasLocation, Boolean hasCapturedDate, Pageable pageable) {
+        return PhotosResponse.from(
+                photoRepository.findByUserIdWithFilters(userId, hasLocation, hasCapturedDate, pageable));
     }
 
     @Transactional(readOnly = true)

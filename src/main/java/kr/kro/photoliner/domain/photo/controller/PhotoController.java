@@ -40,9 +40,11 @@ public class PhotoController {
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotos(
             @RequestParam Long userId,
+            @RequestParam(required = false) Boolean hasLocation,
+            @RequestParam(required = false) Boolean hasCapturedDate,
             @PageableDefault(sort = "capturedDt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return ResponseEntity.ok(photoService.getPhotosByIds(userId, pageable));
+        return ResponseEntity.ok(photoService.getPhotosByIds(userId, hasLocation, hasCapturedDate, pageable));
     }
 
     @GetMapping("/markers")
