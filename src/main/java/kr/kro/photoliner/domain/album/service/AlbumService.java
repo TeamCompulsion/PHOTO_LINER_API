@@ -37,9 +37,9 @@ public class AlbumService {
     private final GeometryFactory geometryFactory;
 
     @Transactional
-    public AlbumCreateResponse createAlbum(AlbumCreateRequest request) {
-        User user = userRepository.findUserById(request.userId())
-                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_USER, "user id: " + request.userId()));
+    public AlbumCreateResponse createAlbum(Long userId, AlbumCreateRequest request) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> CustomException.of(ApiResponseCode.NOT_FOUND_USER, "user id: " + userId));
         Album album = Album.builder()
                 .title(request.title())
                 .user(user)

@@ -2,13 +2,9 @@ package kr.kro.photoliner.domain.photo.dto.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import org.locationtech.jts.geom.Coordinate;
 
 public record PhotoMarkersRequest(
-        @NotNull @Min(0)
-        Long userId,
-
         @Min(0) @Max(90)
         double swLat,
 

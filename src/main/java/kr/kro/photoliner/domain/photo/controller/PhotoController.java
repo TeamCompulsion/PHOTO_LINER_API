@@ -11,6 +11,7 @@ import kr.kro.photoliner.domain.photo.dto.response.PhotoUploadResponse;
 import kr.kro.photoliner.domain.photo.dto.response.PhotosResponse;
 import kr.kro.photoliner.domain.photo.service.PhotoService;
 import kr.kro.photoliner.domain.photo.service.PhotoUploadService;
+import kr.kro.photoliner.global.auth.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,21 +40,24 @@ public class PhotoController {
 
     @GetMapping
     public ResponseEntity<PhotosResponse> getPhotos(
-            @RequestParam Long userId,
+            @Auth Long userId,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return ResponseEntity.ok(photoService.getPhotosByIds(userId, pageable));
     }
 
     @GetMapping("/markers")
-    public ResponseEntity<PhotoMarkersResponse> getPhotoMarkers(@Valid PhotoMarkersRequest request) {
-        return ResponseEntity.ok(photoService.getPhotoMarkers(request));
+    public ResponseEntity<PhotoMarkersResponse> getPhotoMarkers(
+            @Valid PhotoMarkersRequest request,
+            @Auth Long userId
+    ) {
+        return ResponseEntity.ok(photoService.getPhotoMarkers(userId, request));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<PhotoUploadResponse> uploadPhotos(
-            @RequestParam("userId") Long userId,
-            @RequestPart("files") List<MultipartFile> files
+            @RequestPart("files") List<MultipartFile> files,
+            @Auth Long userId
     ) {
         PhotoUploadResponse response = photoUploadService.uploadPhotos(userId, files);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -62,6 +65,7 @@ public class PhotoController {
 
     @PatchMapping("/{photoId}/captured-date")
     public ResponseEntity<Void> updatePhotoCapturedDate(
+            @Auth Long userId,
             @PathVariable Long photoId,
             @Valid @RequestBody PhotoCapturedDateUpdateRequest request
     ) {
@@ -72,7 +76,8 @@ public class PhotoController {
     @PatchMapping("/{photoId}/location")
     public ResponseEntity<Void> updatePhotoLocation(
             @PathVariable Long photoId,
-            @Valid @RequestBody PhotoLocationUpdateRequest request
+            @Valid @RequestBody PhotoLocationUpdateRequest request,
+            @Auth Long userId
     ) {
         photoService.updatePhotoLocation(photoId, request);
         return ResponseEntity.noContent().build();
@@ -80,7 +85,8 @@ public class PhotoController {
 
     @DeleteMapping
     public ResponseEntity<Void> deletePhoto(
-            @Valid @RequestBody DeletePhotosRequest request
+            @Valid @RequestBody DeletePhotosRequest request,
+            @Auth Long userId
     ) {
         photoService.deletePhotos(request);
         return ResponseEntity.noContent().build();

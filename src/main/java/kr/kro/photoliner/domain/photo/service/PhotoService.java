@@ -1,7 +1,6 @@
 package kr.kro.photoliner.domain.photo.service;
 
 import java.util.List;
-import kr.kro.photoliner.domain.album.repository.AlbumPhotoRepository;
 import kr.kro.photoliner.domain.photo.dto.request.DeletePhotosRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoCapturedDateUpdateRequest;
 import kr.kro.photoliner.domain.photo.dto.request.PhotoLocationUpdateRequest;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PhotoService {
 
     private final PhotoRepository photoRepository;
-    private final AlbumPhotoRepository albumPhotoRepository;
     private final GeometryFactory geometryFactory;
     private final FileStorage fileStorage;
 
@@ -37,11 +35,11 @@ public class PhotoService {
     }
 
     @Transactional(readOnly = true)
-    public PhotoMarkersResponse getPhotoMarkers(PhotoMarkersRequest request) {
+    public PhotoMarkersResponse getPhotoMarkers(Long userId, PhotoMarkersRequest request) {
         Point sw = geometryFactory.createPoint(request.getSouthWestCoordinate());
         Point ne = geometryFactory.createPoint(request.getNorthEastCoordinate());
 
-        Photos photos = photoRepository.getByUserIdInBox(request.userId(), sw, ne);
+        Photos photos = photoRepository.getByUserIdInBox(userId, sw, ne);
 
         return PhotoMarkersResponse.from(photos);
     }

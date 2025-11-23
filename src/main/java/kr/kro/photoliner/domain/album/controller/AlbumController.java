@@ -12,6 +12,7 @@ import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoItemsResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumPhotoMarkersResponse;
 import kr.kro.photoliner.domain.album.dto.response.AlbumsResponse;
 import kr.kro.photoliner.domain.album.service.AlbumService;
+import kr.kro.photoliner.global.auth.Auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,16 +37,17 @@ public class AlbumController {
 
     @PostMapping
     public ResponseEntity<AlbumCreateResponse> createAlbum(
-            @Valid @RequestBody AlbumCreateRequest request
+            @Valid @RequestBody AlbumCreateRequest request,
+            @Auth Long userId
     ) {
-        AlbumCreateResponse response = albumService.createAlbum(request);
+        AlbumCreateResponse response = albumService.createAlbum(userId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
     public ResponseEntity<AlbumsResponse> getAlbums(
-            @RequestParam Long userId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @Auth Long userId
     ) {
         return ResponseEntity.ok(albumService.getAlbums(userId, pageable));
     }
@@ -54,7 +55,8 @@ public class AlbumController {
     @PatchMapping("/{albumId}/title")
     public ResponseEntity<Void> updateAlbumTitle(
             @PathVariable Long albumId,
-            @RequestBody @Valid AlbumTitleUpdateRequest request
+            @RequestBody @Valid AlbumTitleUpdateRequest request,
+            @Auth Long userId
     ) {
         albumService.updateAlbumTitle(albumId, request);
         return ResponseEntity.noContent().build();
@@ -62,7 +64,8 @@ public class AlbumController {
 
     @DeleteMapping
     public ResponseEntity<Void> deletePhoto(
-            @Valid @RequestBody AlbumDeleteRequest request
+            @Valid @RequestBody AlbumDeleteRequest request,
+            @Auth Long userId
     ) {
         albumService.deleteAlbums(request);
         return ResponseEntity.noContent().build();
@@ -71,7 +74,8 @@ public class AlbumController {
     @GetMapping("/{albumId}/photos")
     public ResponseEntity<AlbumPhotoItemsResponse> getAlbumItems(
             @PathVariable Long albumId,
-            @PageableDefault Pageable pageable
+            @PageableDefault Pageable pageable,
+            @Auth Long userId
     ) {
         return ResponseEntity.ok(albumService.getAlbumPhotoItems(albumId, pageable));
     }
@@ -79,7 +83,8 @@ public class AlbumController {
     @PostMapping("/{albumId}/photos")
     public ResponseEntity<Void> createAlbumItems(
             @PathVariable Long albumId,
-            @RequestBody @Valid AlbumItemCreateRequest request
+            @RequestBody @Valid AlbumItemCreateRequest request,
+            @Auth Long userId
     ) {
         albumService.createAlbumItems(albumId, request);
         return ResponseEntity.noContent().build();
@@ -88,7 +93,8 @@ public class AlbumController {
     @DeleteMapping("/{albumId}/photos")
     public ResponseEntity<Void> deleteAlbumItems(
             @PathVariable Long albumId,
-            @RequestBody @Valid AlbumItemDeleteRequest request
+            @RequestBody @Valid AlbumItemDeleteRequest request,
+            @Auth Long userId
     ) {
         albumService.deleteAlbumItems(albumId, request);
         return ResponseEntity.noContent().build();
@@ -97,7 +103,8 @@ public class AlbumController {
     @GetMapping("/{albumId}/markers")
     public ResponseEntity<AlbumPhotoMarkersResponse> getAlbumPhotoMarkers(
             @PathVariable Long albumId,
-            @Valid AlbumPhotoMarkersRequest request
+            @Valid AlbumPhotoMarkersRequest request,
+            @Auth Long userId
     ) {
         return ResponseEntity.ok(albumService.getAlbumPhotoMarkers(albumId, request));
     }
