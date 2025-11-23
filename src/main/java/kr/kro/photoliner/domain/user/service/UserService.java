@@ -19,11 +19,11 @@ public class UserService {
 
     public JwtResponse oAuthLogin(String authorizationCode) {
         KakaoOauthTokenResponse tokenResponse = kakaoAuthService.getTokenByAuthorizationCode(authorizationCode);
-        KakaoProfileResponse profileResponse = kakaoAuthService.getKakaoUserProfile(
-                tokenResponse.accessToken());
+        String accessToken = tokenResponse.accessToken();
+        KakaoProfileResponse profileResponse = kakaoAuthService.getKakaoUserProfile(accessToken);
 
         User user = userRepository.findUserByEmail(profileResponse.kakaoAccount().email())
-                .orElse(signup(User.from(profileResponse)));
+                .orElseGet(() -> signup(User.from(profileResponse)));
 
         return new JwtResponse(jwtProvider.createAccessToken(user));
     }

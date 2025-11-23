@@ -8,7 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
+import io.jsonwebtoken.security.WeakKeyException;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
@@ -19,6 +19,7 @@ import kr.kro.photoliner.global.exception.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.WebRequest;
 
 @Component
 public class JwtProvider {
@@ -37,7 +38,7 @@ public class JwtProvider {
         this.accessTokenExpirationTime = accessTokenExpirationTime;
     }
 
-    public String extractAccessToken(HttpServletRequest request) {
+    public String extractAccessToken(WebRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_TYPE)) {
             return bearerToken.substring(BEARER_TYPE_LEN);
@@ -62,13 +63,18 @@ public class JwtProvider {
 
     public void validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
-        } catch (io.jsonwebtoken.security.SignatureException | MalformedJwtException e) {
-            throw CustomException.of(ApiResponseCode.INVALID_JWT_TOKEN);
+            Jwts.parser()
+                    .verifyWith(getSecretKey())
+                    .build()
+                    .parseSignedClaims(token);
+        } catch (io.jsonwebtoken.security.SignatureException | MalformedJwtException | WeakKeyException e) {
+            throw CustomException.of(ApiResponseCode.INVALID_JWT_TOKEN, e.getMessage(), e);
         } catch (ExpiredJwtException e) {
-            throw CustomException.of(ApiResponseCode.EXPIRED_JWT_TOKEN);
+            throw CustomException.of(ApiResponseCode.EXPIRED_JWT_TOKEN, e.getMessage(), e);
         } catch (UnsupportedJwtException | IllegalArgumentException e) {
-            throw CustomException.of(ApiResponseCode.TOKEN_PARSE_ERROR);
+            throw CustomException.of(ApiResponseCode.TOKEN_PARSE_ERROR, e.getMessage(), e);
+        } catch (Exception e) {
+            throw e;
         }
     }
 
