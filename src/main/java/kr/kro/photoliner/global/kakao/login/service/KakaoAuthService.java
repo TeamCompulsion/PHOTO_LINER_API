@@ -41,11 +41,6 @@ public class KakaoAuthService {
                 .getKakaoUserProfile(accessToken);
     }
 
-    public void verifyAccessToken(String accessToken) {
-        kakaoAuthClient.verifyAccessToken(accessToken);
-    }
-
-
     private String createAuthorizationRedirectUri(String restApiKey, String redirectUrlWhenComplete) {
         return KakaoApiUrlConstant.AUTHORIZATION_REDIRECT
                 + "?response_type=code"
