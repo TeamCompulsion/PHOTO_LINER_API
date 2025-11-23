@@ -28,6 +28,6 @@ cloud:
     region:
       static: ap-northeast-2
     s3:
-      bucket: ${BUCKET-NAME}
+      bucket: ${BUCKET_NAME}
     cdn:
       base-url: ${CDN-URL}
