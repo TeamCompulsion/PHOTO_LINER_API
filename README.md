@@ -1,4 +1,8 @@
-# PHOTO LINER API [> 서비스 바로가기](https://dev.photo-liner.kro.kr/)
+# PHOTO LINER API
+> [!CAUTION]
+> ### 🚨 서비스 종료 안내 (Service Terminated)
+> 본 서비스는 **2026년 01월 01일**부로 운영이 종료되었습니다.
+> ~~[서비스 바로가기](https://dev.photo-liner.kro.kr/)~~ (접속 불가)
 
 > **여행의 모든 순간을 지도 위에 그리다**  
 > Photo Liner는 사진에 담긴 순간들을 **지도 위에서 직관적으로 되살려 주는 위치 기반 사진 서비스**입니다.  
